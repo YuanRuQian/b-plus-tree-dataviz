@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AppBar from "./AppBar";
+import DataVisualization from "./DataVisualizatoin";
 
 const ControlPanel = () => {
   const [insertValue, setInsertValue] = useState("");
@@ -49,6 +50,7 @@ const ControlPanel = () => {
 
       {/* B+ tree visualization here */}
       {/* Add your B+ tree visualization code here */}
+      <DataVisualization />
     </div>
   );
 };
