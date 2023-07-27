@@ -1,33 +1,36 @@
 import React, { useState } from "react";
 import AppBar from "./AppBar";
-import DataVisualization from "./DataVisualizatoin";
+import DataVisualization from "./DataVisualization";
 
 const ControlPanel = () => {
-  const [insertValue, setInsertValue] = useState("");
-  const [deleteValue, setDeleteValue] = useState("");
-  const [findValue, setFindValue] = useState("");
-  const [maxDegree, setMaxDegree] = useState("");
+  const [insertValue, setInsertValue] = useState<number>();
+  const [deleteValue, setDeleteValue] = useState<number>();
+  const [findValue, setFindValue] = useState<number>();
+  const [treeOrder, setTreeOrder] = useState<number>();
 
-  // Implement the B+ tree data structure and visualization logic here.
-
-  const handleInsert = () => {
-    // Logic to trigger the insert operation using the insertValue state.
+  // Handle changes in input fields and convert the input to a number
+  const setInsertValueHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newValue = parseInt(event.target.value, 10);
+    setInsertValue(newValue);
   };
 
-  const handleDelete = () => {
-    // Logic to trigger the delete operation using the deleteValue state.
+  const setDeleteValueHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newValue = parseInt(event.target.value, 10);
+    setDeleteValue(newValue);
   };
 
-  const handleFind = () => {
-    // Logic to trigger the find operation using the findValue state.
+  const setFindValueHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(event.target.value, 10);
+    setFindValue(newValue);
   };
 
-  const handleClearAll = () => {
-    // Logic to clear the entire B+ tree.
-  };
-
-  const handleMaxDegreeChange = () => {
-    // Logic to apply the new maximum degree using the maxDegree state.
+  const setTreeOrderHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(event.target.value, 10);
+    setTreeOrder(newValue);
   };
 
   return (
@@ -36,16 +39,16 @@ const ControlPanel = () => {
         insertValue={insertValue}
         deleteValue={deleteValue}
         findValue={findValue}
-        maxDegree={maxDegree}
-        setInsertValue={setInsertValue}
-        setDeleteValue={setDeleteValue}
-        setFindValue={setFindValue}
-        setMaxDegree={setMaxDegree}
-        handleInsert={handleInsert}
-        handleDelete={handleDelete}
-        handleFind={handleFind}
-        handleClearAll={handleClearAll}
-        handleMaxDegreeChange={handleMaxDegreeChange}
+        treeOrder={treeOrder}
+        setInsertValue={setInsertValueHandler}
+        setDeleteValue={setDeleteValueHandler}
+        setFindValue={setFindValueHandler}
+        setTreeOrder={setTreeOrderHandler}
+        handleInsert={() => console.log("Insert")}
+        handleDelete={() => console.log("Delete")}
+        handleFind={() => console.log("Find")}
+        handleClearAll={() => console.log("Clear All")}
+        handleTreeOrderChange={() => console.log("Tree Order Change")}
       />
 
       {/* B+ tree visualization here */}

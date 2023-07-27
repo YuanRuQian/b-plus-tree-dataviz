@@ -1,75 +1,77 @@
 import React from "react";
 import { AppBar as MuiAppBar, Toolbar, Button, Container } from "@mui/material";
-import ButtonWithInput from "./ButtonWithInput";
+import ButtonWithNumberInputAndTooltip from "./ButtonWithNumberInputAndTooltip";
 
 type AppBarProps = {
-  insertValue: string;
-  deleteValue: string;
-  findValue: string;
-  maxDegree: string;
-  setInsertValue: React.Dispatch<React.SetStateAction<string>>;
-  setDeleteValue: React.Dispatch<React.SetStateAction<string>>;
-  setFindValue: React.Dispatch<React.SetStateAction<string>>;
-  setMaxDegree: React.Dispatch<React.SetStateAction<string>>;
+  insertValue: number | undefined;
+  deleteValue: number | undefined;
+  findValue: number | undefined;
+  treeOrder: number | undefined;
+  setInsertValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setDeleteValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setFindValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setTreeOrder: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleInsert: () => void;
   handleDelete: () => void;
   handleFind: () => void;
   handleClearAll: () => void;
-  handleMaxDegreeChange: () => void;
+  handleTreeOrderChange: () => void;
 };
 
 const AppBar: React.FC<AppBarProps> = ({
   insertValue,
   deleteValue,
   findValue,
-  maxDegree,
+  treeOrder, // Changed the prop name from maxDegree to treeOrder
   setInsertValue,
   setDeleteValue,
   setFindValue,
-  setMaxDegree,
+  setTreeOrder, // Changed the prop name from setMaxDegree to setTreeOrder
   handleInsert,
   handleDelete,
   handleFind,
   handleClearAll,
-  handleMaxDegreeChange,
+  handleTreeOrderChange, // Changed the prop name from handleMaxDegreeChange to handleTreeOrderChange
 }) => {
   const InsertButtonWithInput = () => (
-    <ButtonWithInput
+    <ButtonWithNumberInputAndTooltip
       buttonLabel="Insert"
       inputLabel="Insert Value"
       value={insertValue}
-      onChange={(e) => setInsertValue(e.target.value)}
+      onChange={setInsertValue}
       onClick={handleInsert}
     />
   );
 
   const DeleteButtonWithInput = () => (
-    <ButtonWithInput
+    <ButtonWithNumberInputAndTooltip
       buttonLabel="Delete"
       inputLabel="Delete Value"
       value={deleteValue}
-      onChange={(e) => setDeleteValue(e.target.value)}
+      onChange={setDeleteValue}
       onClick={handleDelete}
     />
   );
 
   const FindButtonWithInput = () => (
-    <ButtonWithInput
+    <ButtonWithNumberInputAndTooltip
       buttonLabel="Find"
       inputLabel="Find Value"
       value={findValue}
-      onChange={(e) => setFindValue(e.target.value)}
+      onChange={setFindValue}
       onClick={handleFind}
     />
   );
 
-  const ChooseMaxDegreeButtonWithInput = () => (
-    <ButtonWithInput
-      buttonLabel="Choose Max Degree"
-      inputLabel="Max Degree"
-      value={maxDegree}
-      onChange={(e) => setMaxDegree(e.target.value)}
-      onClick={handleMaxDegreeChange}
+  const ChooseTreeOrderButtonWithInput = () => (
+    <ButtonWithNumberInputAndTooltip
+      buttonLabel="Change Order"
+      inputLabel="Tree Order"
+      value={treeOrder}
+      onChange={setTreeOrder}
+      onClick={handleTreeOrderChange}
+      minValue={3}
+      tooltipTitle="Changing the tree order will clear all data and restart a new tree. Are you sure?"
     />
   );
 
@@ -88,7 +90,7 @@ const AppBar: React.FC<AppBarProps> = ({
           <InsertButtonWithInput />
           <DeleteButtonWithInput />
           <FindButtonWithInput />
-          <ChooseMaxDegreeButtonWithInput />
+          <ChooseTreeOrderButtonWithInput />
           <ClearAllButton />
         </Toolbar>
       </Container>
