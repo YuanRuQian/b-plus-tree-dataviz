@@ -6,13 +6,12 @@ import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
 import { isNull, isUndefined } from "../utils/utils";
 
 const ControlPanel = () => {
-  // TODO: Replace this with a call to the API
-
   const context = useContext(RedBlackTreeContext);
 
   const [insertValue, setInsertValue] = useState<number>();
   const [deleteValue, setDeleteValue] = useState<number>();
   const [findValue, setFindValue] = useState<number>();
+  const [redBlackTreeData, setRedBlackTreeData] = useState<TreeNodeJSON>({} as TreeNodeJSON);
 
   const setInsertValueHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -40,6 +39,9 @@ const ControlPanel = () => {
 
       // clear the input field
       setInsertValue(undefined);
+
+      // update the red black tree data source
+      setRedBlackTreeData(context.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON);
     }
   }
 
@@ -50,6 +52,9 @@ const ControlPanel = () => {
 
       // clear the input field
       setDeleteValue(undefined);
+
+      // update the red black tree data source
+      setRedBlackTreeData(context.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON);
     }
   }
 
@@ -67,6 +72,9 @@ const ControlPanel = () => {
     if(!isNull(context)) {
       context.redBlackTree.clear();
       console.log("Cleared");
+
+      // update the red black tree data source
+      setRedBlackTreeData(context.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON);
     }
   }
 
@@ -87,7 +95,7 @@ const ControlPanel = () => {
 
       {/* B+ tree visualization here */}
       {/* Add your B+ tree visualization code here */}
-      <DataVisualization redBlackTreeData={context?.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON} />
+      <DataVisualization redBlackTreeData={redBlackTreeData} />
     </div>
   );
 };

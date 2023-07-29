@@ -7,28 +7,36 @@ type DataVisualizationProps = {
 };
 
 const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
-  const treeContainerRef = useRef(null);
+
+  console.log(`redBlackTreeData: ${JSON.stringify(redBlackTreeData)}`)
+
+  const treeContainerRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
+    
+    if (!redBlackTreeData || JSON.stringify(redBlackTreeData) === '{}') {
+      // first clear all the elements then return early
+      d3.select(treeContainerRef.current).selectAll("*").remove();
+      return;
+    }
+
     // Create a tree layout
-    const treeLayout = d3
-      .tree<{ name: string; color: string; children: any[] }>()
-      .size([400, 300]);
+    const treeLayout = d3.tree<TreeNodeJSON>().size([400, 300]);
 
     // Create a hierarchy from the data
-    const root = d3.hierarchy(redBlackTreeData) as d3.HierarchyNode<{
-      name: string;
-      color: string;
-      children: any[];
-    }>;
+    const root = d3.hierarchy(redBlackTreeData) as d3.HierarchyNode<TreeNodeJSON>;
 
     // Compute the layout
     const treeRoot = treeLayout(root);
+
+    // Remove the old tree by cleaning up the SVG container
+    d3.select(treeContainerRef.current).selectAll("*").remove();
 
     // Create an SVG group to contain the tree
     const svg = d3.select(treeContainerRef.current);
     const treeGroup = svg.append("g").attr("transform", "translate(100, 50)");
 
+    
     // Add links (edges) between nodes
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const links = treeGroup
@@ -60,16 +68,24 @@ const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
     // Add circles as node elements
     nodes
       .append("circle")
-      .attr("r", 10) // Set the radius of the circles
+      .attr("r", '1rem') // Set the radius of the circles
       .attr("fill", (d) => d.data.color); // Customize the fill color based on the "color" property
 
     // Add text labels for nodes
     nodes
       .append("text")
-      .attr("dy", 4)
-      .attr("x", (d) => (d.children ? -15 : 15)) // Adjust the label position based on children existence
-      .style("text-anchor", (d) => (d.children ? "end" : "start"))
-      .text((d) => d.data.name);
+      .style("text-anchor", "middle") // Center the text horizontally
+      .attr("fill", "white") // Set the text color to white
+      .text((d) => d.data.name)
+      .each(function (d) {
+        // Get the bounding box of the text element
+        const bbox = this.getBBox();
+        // Calculate the translation to center the text within the circle
+        const xTranslation = -bbox.width / 4;
+        const yTranslation = bbox.height / 4; // Adjust the vertical position as needed
+        d3.select(this).attr("transform", `translate(${xTranslation}, ${yTranslation})`);
+      });
+
   }, [redBlackTreeData]);
 
   return (
