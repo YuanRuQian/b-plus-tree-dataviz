@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import { TreeNodeJSON } from "../utils/Node";
 
 type DataVisualizationProps = {
-  redBlackTreeData: TreeNodeJSON;
+  redBlackTreeData: TreeNodeJSON | null;
 };
 
 const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
@@ -70,7 +70,7 @@ const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
       .attr("x", (d) => (d.children ? -15 : 15)) // Adjust the label position based on children existence
       .style("text-anchor", (d) => (d.children ? "end" : "start"))
       .text((d) => d.data.name);
-  }, []);
+  }, [redBlackTreeData]);
 
   return (
     <div

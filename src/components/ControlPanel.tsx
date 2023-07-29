@@ -1,74 +1,74 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AppBar from "./AppBar";
 import DataVisualization from "./DataVisualization";
 import { TreeNodeJSON } from "../utils/Node";
+import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
+import { isNull, isUndefined } from "../utils/utils";
 
 const ControlPanel = () => {
-
   // TODO: Replace this with a call to the API
-  const testJSON = {
-    name: "10",
-    color: "black",
-    children: [
-      {
-        name: "7",
-        color: "black",
-        children: [],
-      },
-      {
-        name: "15",
-        color: "red",
-        children: [
-          {
-            name: "12",
-            color: "black",
-            children: [],
-          },
-          {
-            name: "22",
-            color: "black",
-            children: [
-              {
-                name: "20",
-                color: "red",
-                children: [],
-              },
-              {
-                name: "25",
-                color: "red",
-                children: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  } as TreeNodeJSON;
 
+  const context = useContext(RedBlackTreeContext);
 
   const [insertValue, setInsertValue] = useState<number>();
   const [deleteValue, setDeleteValue] = useState<number>();
   const [findValue, setFindValue] = useState<number>();
 
-  // Handle changes in input fields and convert the input to a number
   const setInsertValueHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const newValue = parseInt(event.target.value, 10);
+    const newValue = parseFloat(event.target.value);
     setInsertValue(newValue);
   };
 
   const setDeleteValueHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const newValue = parseInt(event.target.value, 10);
+    const newValue = parseFloat(event.target.value);
     setDeleteValue(newValue);
   };
 
   const setFindValueHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value, 10);
+    const newValue = parseFloat(event.target.value);
     setFindValue(newValue);
   };
+
+  const handleInsert = () => {
+    if(!isUndefined(insertValue) && !isNull(context)) {
+      context.redBlackTree.insert(insertValue);
+      console.log(`Inserted: ${insertValue}`);
+
+      // clear the input field
+      setInsertValue(undefined);
+    }
+  }
+
+  const handleDelete = () => {
+    if(!isUndefined(deleteValue) && !isNull(context)) {
+      context.redBlackTree.delete(deleteValue);
+      console.log(`Deleted: ${deleteValue}`);
+
+      // clear the input field
+      setDeleteValue(undefined);
+    }
+  }
+
+  const handleFind = () => {
+    if(!isUndefined(findValue) && !isNull(context)) {
+      const res = context.redBlackTree.find(findValue);
+      console.log(res ? `Found: ${findValue}` : `Not found: ${findValue}`);
+
+      // clear the input field
+      setFindValue(undefined);
+    }
+  }
+
+  const handleClearAll = () => {
+    if(!isNull(context)) {
+      context.redBlackTree.clear();
+      console.log("Cleared");
+    }
+  }
 
   return (
     <div>
@@ -79,15 +79,15 @@ const ControlPanel = () => {
         setInsertValue={setInsertValueHandler}
         setDeleteValue={setDeleteValueHandler}
         setFindValue={setFindValueHandler}
-        handleInsert={() => console.log("Insert")}
-        handleDelete={() => console.log("Delete")}
-        handleFind={() => console.log("Find")}
-        handleClearAll={() => console.log("Clear All")}
+        handleInsert={handleInsert}
+        handleDelete={handleDelete}
+        handleFind={handleFind}
+        handleClearAll={handleClearAll}
       />
 
       {/* B+ tree visualization here */}
       {/* Add your B+ tree visualization code here */}
-      <DataVisualization redBlackTreeData={testJSON} />
+      <DataVisualization redBlackTreeData={context?.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON} />
     </div>
   );
 };

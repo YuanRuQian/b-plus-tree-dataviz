@@ -5,8 +5,6 @@ export class RedBlackTree {
   _root: Node;
   _size: number;
 
-
-
   // construct a new tree from an existing tree's in-order traversal path
   constructor(tree?: RedBlackTree) {
     if (isUndefined(tree)) {
