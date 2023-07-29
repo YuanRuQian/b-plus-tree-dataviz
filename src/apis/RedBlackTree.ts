@@ -1,4 +1,5 @@
-import { Node } from "./Node";
+import { Node, NodeColor, TreeNodeJSON } from "./Node";
+import { isNull } from "./utils";
 
 export class RedBlackTree {
   _root: Node;
@@ -21,7 +22,7 @@ export class RedBlackTree {
   insert(key: number): this {
     const node = this._findNode(key);
 
-    if (!node.isNIL) {
+    if (node.isNIL) {
       this._insertNode(new Node(key));
     }
 
@@ -31,8 +32,8 @@ export class RedBlackTree {
   delete(key: number): boolean {
     const node = this._findNode(key);
     const result = this._deleteNode(node);
-    
-    if(!node.isNIL) {
+
+    if (!node.isNIL) {
       node._parent = node._left = node._right = Node.NIL;
     }
     return result;
@@ -307,5 +308,82 @@ export class RedBlackTree {
     }
     node._parent = child;
     child._right = node;
+  }
+
+  // In-order traversal method to return the tree data in JSON format
+  getInOrderTraversalPath(node: Node = this._root): TreeNodeJSON | null {
+    if (node.isNIL) {
+      return null;
+    }
+
+    return {
+      name: node.key.toString(),
+      color: node.isBlack ? NodeColor.BLACK : NodeColor.RED,
+      children: [
+        this.getInOrderTraversalPath(node._left),
+        this.getInOrderTraversalPath(node._right),
+      ].filter((child) => !isNull(child)) as TreeNodeJSON[] | undefined,
+    };
+  }
+
+  // There cannot be 2 consecutive red nodes.
+  // Helper function to check if every red node has two black children and a black parent
+  checkNoTwoConsecutiveRedNodes(node: Node): boolean {
+    if (node.isNIL) {
+      return true;
+    }
+
+    if (node.isRed) {
+      if (!node._left.isBlack || !node._right.isBlack) {
+        return false;
+      }
+    }
+
+    return (
+      this.checkNoTwoConsecutiveRedNodes(node._left) &&
+      this.checkNoTwoConsecutiveRedNodes(node._right)
+    );
+  }
+
+  // Returns the number of black nodes in a subtree of the given node
+  // or -1 if it is not a red black tree.
+  computeBlackHeight(node: Node): number {
+    if (node.isNIL) {
+      return 0;
+    }
+
+    const leftHeight = this.computeBlackHeight(node._left);
+    const rightHeight = this.computeBlackHeight(node._right);
+
+    const add = node.isBlack ? 1 : 0;
+
+    if (leftHeight === -1 || rightHeight === -1 || leftHeight !== rightHeight) {
+      return -1;
+    } else {
+      return leftHeight + add;
+    }
+  }
+
+  checkIfBlackHeightIsValid(node: Node): boolean {
+    return this.computeBlackHeight(node) !== -1;
+  }
+
+  checkIfIsRedBlackTree(): boolean {
+    // The root is black
+    if (!this._root.isBlack) {
+      return false;
+    }
+
+    // There cannot be 2 consecutive red nodes.
+    if (!this.checkNoTwoConsecutiveRedNodes(this._root)) {
+      return false;
+    }
+
+    // Every path from a node to a descendant leaf contains the same number of black nodes.
+    if (!this.checkIfBlackHeightIsValid(this._root)) {
+      return false;
+    }
+
+    return true;
   }
 }

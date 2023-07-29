@@ -3,6 +3,12 @@ export enum NodeColor {
   BLACK = "black",
 }
 
+export interface TreeNodeJSON {
+  name: string;
+  color: NodeColor;
+  children?: TreeNodeJSON[];
+}
+
 const generateNIL = (): Node => {
   const nil = new Node(-1);
   nil._parent = nil;
@@ -40,7 +46,7 @@ export class Node {
   }
 
   get key(): number {
-    return this.key;
+    return this._key;
   }
 
   constructor(key: number) {

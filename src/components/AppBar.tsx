@@ -6,32 +6,26 @@ type AppBarProps = {
   insertValue: number | undefined;
   deleteValue: number | undefined;
   findValue: number | undefined;
-  treeOrder: number | undefined;
   setInsertValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setDeleteValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setFindValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setTreeOrder: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleInsert: () => void;
   handleDelete: () => void;
   handleFind: () => void;
   handleClearAll: () => void;
-  handleTreeOrderChange: () => void;
 };
 
 const AppBar: React.FC<AppBarProps> = ({
   insertValue,
   deleteValue,
   findValue,
-  treeOrder, // Changed the prop name from maxDegree to treeOrder
   setInsertValue,
   setDeleteValue,
   setFindValue,
-  setTreeOrder, // Changed the prop name from setMaxDegree to setTreeOrder
   handleInsert,
   handleDelete,
   handleFind,
   handleClearAll,
-  handleTreeOrderChange, // Changed the prop name from handleMaxDegreeChange to handleTreeOrderChange
 }) => {
   const InsertButtonWithInput = () => (
     <ButtonWithNumberInputAndTooltip
@@ -63,18 +57,6 @@ const AppBar: React.FC<AppBarProps> = ({
     />
   );
 
-  const ChooseTreeOrderButtonWithInput = () => (
-    <ButtonWithNumberInputAndTooltip
-      buttonLabel="Change Order"
-      inputLabel="Tree Order"
-      value={treeOrder}
-      onChange={setTreeOrder}
-      onClick={handleTreeOrderChange}
-      minValue={3}
-      tooltipTitle="Changing the tree order will clear all data and restart a new tree. Are you sure?"
-    />
-  );
-
   const ClearAllButton = () => (
     <div>
       <Button variant="outlined" onClick={handleClearAll}>
@@ -90,7 +72,6 @@ const AppBar: React.FC<AppBarProps> = ({
           <InsertButtonWithInput />
           <DeleteButtonWithInput />
           <FindButtonWithInput />
-          <ChooseTreeOrderButtonWithInput />
           <ClearAllButton />
         </Toolbar>
       </Container>

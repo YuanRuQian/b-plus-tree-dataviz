@@ -1,31 +1,96 @@
-import React from "react";
-import Tree from "react-d3-tree";
+import React, { useEffect, useRef } from "react";
+import * as d3 from "d3";
+import { NodeColor, TreeNodeJSON } from "../apis/Node";
 
-// TODO: Replace with actual tree data visualization
-
-const bPlusTreeData = {
-  name: "Root",
+const rbTreeData: TreeNodeJSON = {
+  name: "10",
+  color: NodeColor.BLACK,
   children: [
     {
-      name: "6",
-      children: [{ name: "1" }, { name: "4" }, { name: "5" }],
+      name: "5",
+      color: NodeColor.RED,
+      children: [
+        { name: "1", color: NodeColor.BLACK },
+        { name: "7", color: NodeColor.BLACK },
+      ],
     },
     {
-      name: "10",
-      children: [{ name: "7" }, { name: "8" }, { name: "9" }],
-    },
-    {
-      name: "14",
-      children: [{ name: "11" }, { name: "12" }, { name: "13" }],
-    },
-    {
-      name: "16",
-      children: [{ name: "15" }],
+      name: "15",
+      color: NodeColor.RED,
+      children: [
+        { name: "12", color: NodeColor.BLACK },
+        { name: "20", color: NodeColor.BLACK },
+      ],
     },
   ],
 };
 
 const DataVisualization = () => {
+  const treeContainerRef = useRef(null);
+
+  useEffect(() => {
+    // Create a tree layout
+    const treeLayout = d3
+      .tree<{ name: string; color: string; children: any[] }>()
+      .size([400, 300]);
+
+    // Create a hierarchy from the data
+    const root = d3.hierarchy(rbTreeData) as d3.HierarchyNode<{
+      name: string;
+      color: string;
+      children: any[];
+    }>;
+
+    // Compute the layout
+    const treeRoot = treeLayout(root);
+
+    // Create an SVG group to contain the tree
+    const svg = d3.select(treeContainerRef.current);
+    const treeGroup = svg.append("g").attr("transform", "translate(100, 50)");
+
+    // Add links (edges) between nodes
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const links = treeGroup
+      .selectAll<SVGPathElement, d3.HierarchyPointLink<any>>(".link")
+      .data(treeRoot.links())
+      .enter()
+      .append("path")
+      .attr("class", "link")
+      .attr(
+        "d",
+        d3
+          .linkHorizontal<
+            d3.HierarchyPointLink<any>,
+            d3.HierarchyPointNode<any>
+          >()
+          .x((d) => d.x!)
+          .y((d) => d.y!),
+      );
+
+    // Add nodes to the tree
+    const nodes = treeGroup
+      .selectAll<SVGGElement, d3.HierarchyPointNode<any>>(".node")
+      .data(treeRoot.descendants())
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+    // Add circles as node elements
+    nodes
+      .append("circle")
+      .attr("r", 10) // Set the radius of the circles
+      .attr("fill", (d) => d.data.color); // Customize the fill color based on the "color" property
+
+    // Add text labels for nodes
+    nodes
+      .append("text")
+      .attr("dy", 4)
+      .attr("x", (d) => (d.children ? -15 : 15)) // Adjust the label position based on children existence
+      .style("text-anchor", (d) => (d.children ? "end" : "start"))
+      .text((d) => d.data.name);
+  }, []);
+
   return (
     <div
       id="treeWrapper"
@@ -37,11 +102,7 @@ const DataVisualization = () => {
         width: "100vw",
       }}
     >
-      <Tree
-        orientation="vertical"
-        translate={{ x: 300, y: 50 }}
-        data={bPlusTreeData}
-      />
+      <svg ref={treeContainerRef} width="600" height="400"></svg>
     </div>
   );
 };
