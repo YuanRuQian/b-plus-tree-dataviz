@@ -1,3 +1,4 @@
+import exp from "constants";
 import { RedBlackTree } from "../utils/RedBlackTree";
 
 describe("RedBlackTree", () => {
@@ -304,5 +305,35 @@ describe("RedBlackTree", () => {
     );
 
     expect(traversalPathString).toBe(traversalPathStringCopy);
+  });
+
+  it("could clear the tree", () => {
+    // randomly generate 10 numbers as an array
+    const randomNumbers = [];
+    for (let i = 0; i < 10; i++) {
+      randomNumbers.push(Math.floor(Math.random() * 100));
+    }
+
+    // insert the numbers into the tree
+    randomNumbers.forEach((number) => {
+      rbTree.insert(number);
+    });
+
+    expect(rbTree.size).toBe(randomNumbers.length);
+
+    rbTree.clear();
+
+    // all nodes should be deleted
+    randomNumbers.forEach((number) => {
+      expect(rbTree.find(number)).toBeUndefined();
+    });
+
+    expect(rbTree.size).toBe(0);
+    expect(rbTree._root.isNIL).toBe(true);
+
+    const traversalPathString = JSON.stringify( rbTree.getInOrderTraversalPath() );
+    const jsonString = JSON.stringify(null);
+
+    expect(traversalPathString).toBe(jsonString);
   });
 });
