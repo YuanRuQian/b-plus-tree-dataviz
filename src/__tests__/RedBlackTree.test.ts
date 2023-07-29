@@ -1,4 +1,4 @@
-import { RedBlackTree } from "../apis/RedBlackTree";
+import { RedBlackTree } from "../utils/RedBlackTree";
 
 describe("RedBlackTree", () => {
   let rbTree: RedBlackTree;

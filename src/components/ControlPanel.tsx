@@ -1,8 +1,51 @@
 import React, { useState } from "react";
 import AppBar from "./AppBar";
 import DataVisualization from "./DataVisualization";
+import { TreeNodeJSON } from "../utils/Node";
 
 const ControlPanel = () => {
+
+  // TODO: Replace this with a call to the API
+  const testJSON = {
+    name: "10",
+    color: "black",
+    children: [
+      {
+        name: "7",
+        color: "black",
+        children: [],
+      },
+      {
+        name: "15",
+        color: "red",
+        children: [
+          {
+            name: "12",
+            color: "black",
+            children: [],
+          },
+          {
+            name: "22",
+            color: "black",
+            children: [
+              {
+                name: "20",
+                color: "red",
+                children: [],
+              },
+              {
+                name: "25",
+                color: "red",
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  } as TreeNodeJSON;
+
+
   const [insertValue, setInsertValue] = useState<number>();
   const [deleteValue, setDeleteValue] = useState<number>();
   const [findValue, setFindValue] = useState<number>();
@@ -44,7 +87,7 @@ const ControlPanel = () => {
 
       {/* B+ tree visualization here */}
       {/* Add your B+ tree visualization code here */}
-      <DataVisualization />
+      <DataVisualization redBlackTreeData={testJSON} />
     </div>
   );
 };

@@ -1,31 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { NodeColor, TreeNodeJSON } from "../apis/Node";
+import { TreeNodeJSON } from "../utils/Node";
 
-const rbTreeData: TreeNodeJSON = {
-  name: "10",
-  color: NodeColor.BLACK,
-  children: [
-    {
-      name: "5",
-      color: NodeColor.RED,
-      children: [
-        { name: "1", color: NodeColor.BLACK },
-        { name: "7", color: NodeColor.BLACK },
-      ],
-    },
-    {
-      name: "15",
-      color: NodeColor.RED,
-      children: [
-        { name: "12", color: NodeColor.BLACK },
-        { name: "20", color: NodeColor.BLACK },
-      ],
-    },
-  ],
+type DataVisualizationProps = {
+  redBlackTreeData: TreeNodeJSON;
 };
 
-const DataVisualization = () => {
+const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
   const treeContainerRef = useRef(null);
 
   useEffect(() => {
@@ -35,7 +16,7 @@ const DataVisualization = () => {
       .size([400, 300]);
 
     // Create a hierarchy from the data
-    const root = d3.hierarchy(rbTreeData) as d3.HierarchyNode<{
+    const root = d3.hierarchy(redBlackTreeData) as d3.HierarchyNode<{
       name: string;
       color: string;
       children: any[];
