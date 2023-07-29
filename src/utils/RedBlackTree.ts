@@ -1,13 +1,54 @@
 import { Node, NodeColor, TreeNodeJSON } from "./Node";
-import { isNull } from "./utils";
+import { isNull, isUndefined } from "./utils";
 
 export class RedBlackTree {
   _root: Node;
   _size: number;
 
-  constructor() {
-    this._root = Node.NIL;
-    this._size = 0;
+
+
+  // construct a new tree from an existing tree's in-order traversal path
+  constructor(tree?: RedBlackTree) {
+    if (isUndefined(tree)) {
+      this._root = Node.NIL;
+      this._size = 0;
+    } else {
+      this._root = Node.NIL;
+      this._size = 0;
+
+      if (tree._root.isNIL) {
+        return;
+      }
+
+      const path = tree.getInOrderTraversalPath();
+ 
+      if (!isNull(path)) {
+        this._root = this.constructTreeFromJSON(path);
+        this._size = tree._size;
+      }
+    }
+  }
+
+  // construct tree with the exact left / right subtree with the given node ( same color )
+  constructTreeFromJSON(node: TreeNodeJSON | undefined): Node {
+    if (isUndefined(node)) {
+      return Node.NIL;
+    }
+
+    const newNode = new Node(parseInt(node.name));
+    newNode.setBlack = node.color === NodeColor.BLACK;
+    newNode._left = this.constructTreeFromJSON(node.children?.[0]);
+    newNode._right = this.constructTreeFromJSON(node.children?.[1]);
+
+    if (!newNode._left.isNIL) {
+      newNode._left._parent = newNode;
+    }
+
+    if (!newNode._right.isNIL) {
+      newNode._right._parent = newNode;
+    }
+
+    return newNode;
   }
 
   get size(): number {

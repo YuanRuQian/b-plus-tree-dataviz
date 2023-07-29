@@ -280,4 +280,29 @@ describe("RedBlackTree", () => {
 
     expect(traversalPathString).toBe(jsonString);
   });
+
+  it("should construct a deep copy from a RedBlackTree instance", () => {
+    
+    // random insert 100 numbers into the tree
+    for (let i = 0; i < 100; i++) {
+      rbTree.insert(Math.floor(Math.random() * 100));
+    }
+
+    // deep copy the tree
+    const rbTreeCopy = new RedBlackTree(rbTree);
+
+    // check if two trees have the same size
+    expect(rbTree.size).toBe(rbTreeCopy.size);
+
+    // check if the two trees have the same traversal path
+    const traversalPathString = JSON.stringify(
+      rbTree.getInOrderTraversalPath(),
+    );
+
+    const traversalPathStringCopy = JSON.stringify(
+      rbTreeCopy.getInOrderTraversalPath(),
+    );
+
+    expect(traversalPathString).toBe(traversalPathStringCopy);
+  });
 });
