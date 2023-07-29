@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar as MuiAppBar, Toolbar, Button, Container } from "@mui/material";
-import ButtonWithNumberInputAndTooltip from "./ButtonWithNumberInputAndTooltip";
+import ButtonWithNumberInputAndTooltip from "./ButtonWithNumberInput";
 
 type AppBarProps = {
   insertValue: number | undefined;
