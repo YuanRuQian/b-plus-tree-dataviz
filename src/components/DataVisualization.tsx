@@ -40,6 +40,9 @@ const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
     links.enter()
       .append("path")
       .attr("class", "link")
+    .attr("fill", "none") // Set fill to none for the path elements
+      .attr("stroke", "gray") // Set stroke color for the path elements
+      .attr("strokeWidth", "5px") 
       .attr("d", d3.linkHorizontal<d3.HierarchyPointLink<any>, d3.HierarchyPointNode<any>>()
         .x((d) => d.x!)
         .y((d) => d.y!))
@@ -113,13 +116,14 @@ const DataVisualization = ({ redBlackTreeData }: DataVisualizationProps) => {
       id="treeWrapper"
       style={{
         display: "flex",
+        flexDirection: "column", // Align elements vertically
         justifyContent: "center", // Center horizontally
         alignItems: "center", // Center vertically
         height: "100vh",
         width: "100vw",
       }}
     >
-      <svg ref={treeContainerRef} width="600" height="400"></svg>
+      <svg ref={treeContainerRef} width="100%" height="100%"></svg>
     </div>
   );
 };

@@ -48,9 +48,6 @@ const ControlPanel = () => {
         handleFind={handleFind}
         handleClearAll={handleClearAll}
       />
-
-      {/* B+ tree visualization here */}
-      {/* Add your B+ tree visualization code here */}
       <DataVisualization redBlackTreeData={redBlackTreeData} />
     </div>
   );

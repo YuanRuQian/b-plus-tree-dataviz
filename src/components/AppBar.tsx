@@ -32,7 +32,7 @@ const CustomNumberInput = ({ value, onChange, inputLabel }: CustomNumberInputPro
   <TextField
     type="number"
     label={inputLabel}
-    value={value || ""}
+    value={isUndefined(value) ? "" : value}
     onChange={onChange}
   />
 );
@@ -92,7 +92,7 @@ const AppBar: React.FC<AppBarProps> = ({
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-    <MuiAppBar position="fixed" color="transparent">
+    <MuiAppBar position="sticky" color="transparent">
         <Toolbar disableGutters style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <CustomNumberInput value={input} onChange={handleInputChanges} inputLabel="Enter a number" />
           <InsertButtonWithInput />
