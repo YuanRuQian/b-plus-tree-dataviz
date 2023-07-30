@@ -1,100 +1,127 @@
 import React from "react";
-import { AppBar as MuiAppBar, Toolbar, Button, Container } from "@mui/material";
-import ButtonWithNumberInputAndTooltip from "./ButtonWithNumberInputAndTooltip";
+import {
+  AppBar as MuiAppBar,
+  Toolbar,
+  Button,
+  TextField,
+  Box,
+} from "@mui/material";
+import { isUndefined } from "../utils/utils";
 
 type AppBarProps = {
-  insertValue: number | undefined;
-  deleteValue: number | undefined;
-  findValue: number | undefined;
-  treeOrder: number | undefined;
-  setInsertValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setDeleteValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setFindValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setTreeOrder: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleInsert: () => void;
-  handleDelete: () => void;
-  handleFind: () => void;
+  handleInsert: (value: number) => void;
+  handleDelete: (value: number) => void;
+  handleFind: (value: number) => void;
   handleClearAll: () => void;
-  handleTreeOrderChange: () => void;
 };
 
+type CustomButtonProps = {
+  onClick: () => void;
+  buttonLabel: string;
+};
+
+const CustomButton = ({ onClick, buttonLabel }: CustomButtonProps) => (
+  <div>
+    <Button variant="outlined" onClick={onClick}>
+      {buttonLabel}
+    </Button>
+  </div>
+);
+
+type CustomNumberInputProps = {
+  value: number | undefined;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputLabel: string;
+};
+
+const CustomNumberInput = ({
+  value,
+  onChange,
+  inputLabel,
+}: CustomNumberInputProps) => (
+  <TextField
+    type="number"
+    label={inputLabel}
+    value={isUndefined(value) ? "" : value}
+    onChange={onChange}
+  />
+);
+
 const AppBar: React.FC<AppBarProps> = ({
-  insertValue,
-  deleteValue,
-  findValue,
-  treeOrder, // Changed the prop name from maxDegree to treeOrder
-  setInsertValue,
-  setDeleteValue,
-  setFindValue,
-  setTreeOrder, // Changed the prop name from setMaxDegree to setTreeOrder
   handleInsert,
   handleDelete,
   handleFind,
   handleClearAll,
-  handleTreeOrderChange, // Changed the prop name from handleMaxDegreeChange to handleTreeOrderChange
 }) => {
+  const [input, setInput] = React.useState<number | undefined>(undefined);
+
+  const handleInputChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(parseFloat(event.target.value));
+  };
+
+  const handleInsertButtonClick = () => {
+    if (!isUndefined(input)) {
+      handleInsert(input);
+      setInput(undefined);
+      console.log(`Inserting ${input}`);
+    }
+  };
+
+  const handleDeleteButtonClick = () => {
+    if (!isUndefined(input)) {
+      handleDelete(input);
+      setInput(undefined);
+      console.log(`Deleting ${input}`);
+    }
+  };
+
+  const handleFindButtonClick = () => {
+    if (!isUndefined(input)) {
+      handleFind(input);
+      setInput(undefined);
+      console.log(`Finding ${input}`);
+    }
+  };
+
   const InsertButtonWithInput = () => (
-    <ButtonWithNumberInputAndTooltip
-      buttonLabel="Insert"
-      inputLabel="Insert Value"
-      value={insertValue}
-      onChange={setInsertValue}
-      onClick={handleInsert}
-    />
+    <CustomButton onClick={handleInsertButtonClick} buttonLabel="Insert" />
   );
 
   const DeleteButtonWithInput = () => (
-    <ButtonWithNumberInputAndTooltip
-      buttonLabel="Delete"
-      inputLabel="Delete Value"
-      value={deleteValue}
-      onChange={setDeleteValue}
-      onClick={handleDelete}
-    />
+    <CustomButton onClick={handleDeleteButtonClick} buttonLabel="Delete" />
   );
 
   const FindButtonWithInput = () => (
-    <ButtonWithNumberInputAndTooltip
-      buttonLabel="Find"
-      inputLabel="Find Value"
-      value={findValue}
-      onChange={setFindValue}
-      onClick={handleFind}
-    />
-  );
-
-  const ChooseTreeOrderButtonWithInput = () => (
-    <ButtonWithNumberInputAndTooltip
-      buttonLabel="Change Order"
-      inputLabel="Tree Order"
-      value={treeOrder}
-      onChange={setTreeOrder}
-      onClick={handleTreeOrderChange}
-      minValue={3}
-      tooltipTitle="Changing the tree order will clear all data and restart a new tree. Are you sure?"
-    />
+    <CustomButton onClick={handleFindButtonClick} buttonLabel="Find" />
   );
 
   const ClearAllButton = () => (
-    <div>
-      <Button variant="outlined" onClick={handleClearAll}>
-        Clear All
-      </Button>
-    </div>
+    <CustomButton onClick={handleClearAll} buttonLabel="Clear All" />
   );
 
   return (
-    <MuiAppBar position="static" color="transparent">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <Box sx={{ flexGrow: 1 }}>
+      <MuiAppBar position="sticky" color="transparent">
+        <Toolbar
+          disableGutters
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <CustomNumberInput
+            value={input}
+            onChange={handleInputChanges}
+            inputLabel="Enter a number"
+          />
           <InsertButtonWithInput />
           <DeleteButtonWithInput />
           <FindButtonWithInput />
-          <ChooseTreeOrderButtonWithInput />
           <ClearAllButton />
         </Toolbar>
-      </Container>
-    </MuiAppBar>
+      </MuiAppBar>
+    </Box>
   );
 };
 

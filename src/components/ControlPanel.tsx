@@ -1,59 +1,64 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AppBar from "./AppBar";
 import DataVisualization from "./DataVisualization";
+import { TreeNodeJSON } from "../utils/Node";
+import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
+import { isNull } from "../utils/utils";
 
 const ControlPanel = () => {
-  const [insertValue, setInsertValue] = useState<number>();
-  const [deleteValue, setDeleteValue] = useState<number>();
-  const [findValue, setFindValue] = useState<number>();
-  const [treeOrder, setTreeOrder] = useState<number>();
+  const context = useContext(RedBlackTreeContext);
 
-  // Handle changes in input fields and convert the input to a number
-  const setInsertValueHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newValue = parseInt(event.target.value, 10);
-    setInsertValue(newValue);
+  const [redBlackTreeData, setRedBlackTreeData] = useState<TreeNodeJSON>(
+    {} as TreeNodeJSON,
+  );
+
+  const handleInsert = (value: number) => {
+    if (!isNull(context)) {
+      context.redBlackTree.insert(value);
+      setRedBlackTreeData(
+        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      );
+      console.log(`Tree size: ${context.redBlackTree.size}`);
+    }
   };
 
-  const setDeleteValueHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newValue = parseInt(event.target.value, 10);
-    setDeleteValue(newValue);
+  const handleDelete = (value: number) => {
+    if (!isNull(context)) {
+      context.redBlackTree.delete(value);
+      setRedBlackTreeData(
+        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      );
+      console.log(`Tree size: ${context.redBlackTree.size}`);
+    }
   };
 
-  const setFindValueHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value, 10);
-    setFindValue(newValue);
+  const handleFind = (value: number) => {
+    if (!isNull(context)) {
+      context.redBlackTree.find(value);
+
+      // TODO: do something with the result of find
+    }
   };
 
-  const setTreeOrderHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value, 10);
-    setTreeOrder(newValue);
+  const handleClearAll = () => {
+    if (!isNull(context)) {
+      context.redBlackTree.clear();
+      setRedBlackTreeData(
+        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      );
+      console.log(`Tree size: ${context.redBlackTree.size}`);
+    }
   };
 
   return (
     <div>
       <AppBar
-        insertValue={insertValue}
-        deleteValue={deleteValue}
-        findValue={findValue}
-        treeOrder={treeOrder}
-        setInsertValue={setInsertValueHandler}
-        setDeleteValue={setDeleteValueHandler}
-        setFindValue={setFindValueHandler}
-        setTreeOrder={setTreeOrderHandler}
-        handleInsert={() => console.log("Insert")}
-        handleDelete={() => console.log("Delete")}
-        handleFind={() => console.log("Find")}
-        handleClearAll={() => console.log("Clear All")}
-        handleTreeOrderChange={() => console.log("Tree Order Change")}
+        handleInsert={handleInsert}
+        handleDelete={handleDelete}
+        handleFind={handleFind}
+        handleClearAll={handleClearAll}
       />
-
-      {/* B+ tree visualization here */}
-      {/* Add your B+ tree visualization code here */}
-      <DataVisualization />
+      <DataVisualization redBlackTreeData={redBlackTreeData} />
     </div>
   );
 };
