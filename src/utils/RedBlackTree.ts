@@ -1,4 +1,4 @@
-import { Node, NodeColor, TreeNodeJSON } from "./Node";
+import { Node, NodeColor, TreeNodeJSON } from "./RedBlackTreeNode";
 import { isNull, isUndefined } from "./utils";
 
 /**
@@ -28,7 +28,6 @@ import { isNull, isUndefined } from "./utils";
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
 
 export class RedBlackTree {
   _root: Node;

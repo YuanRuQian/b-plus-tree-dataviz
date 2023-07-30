@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { TreeNodeJSON } from "../utils/Node";
+import { TreeNodeJSON } from "../utils/RedBlackTreeNode";
 
 type DataVisualizationProps = {
   redBlackTreeData: TreeNodeJSON | null;

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import AppBar from "./AppBar";
 import DataVisualization from "./DataVisualization";
-import { TreeNodeJSON } from "../utils/Node";
+import { TreeNodeJSON } from "../utils/RedBlackTreeNode";
 import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
 import { isNull } from "../utils/utils";
 
