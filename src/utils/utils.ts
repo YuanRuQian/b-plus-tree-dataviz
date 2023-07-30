@@ -4,4 +4,4 @@ export const isNull = (node: any): node is null => {
 
 export const isUndefined = (value: any): value is undefined => {
   return typeof value === "undefined";
-}
+};

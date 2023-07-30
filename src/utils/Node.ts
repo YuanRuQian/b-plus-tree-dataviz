@@ -14,7 +14,7 @@ const generateNIL = (): Node => {
   nil._parent = nil;
   nil._left = nil;
   nil._right = nil;
-  nil.setBlack = true;
+  nil._black = true;
   return nil;
 };
 
@@ -23,22 +23,14 @@ export class Node {
   _parent: Node;
   _left: Node;
   _right: Node;
-  _color: NodeColor;
+  _black: boolean;
 
-  get isRed(): boolean {
-    return this._color === NodeColor.RED;
+  get _red(): boolean {
+    return !this._black;
   }
 
-  set setRed(isRed: boolean) {
-    this._color = isRed ? NodeColor.RED : NodeColor.BLACK;
-  }
-
-  get isBlack(): boolean {
-    return this._color === NodeColor.BLACK;
-  }
-
-  set setBlack(isBlack: boolean) {
-    this._color = isBlack ? NodeColor.BLACK : NodeColor.RED;
+  set _red(isRed: boolean) {
+    this._black = !isRed;
   }
 
   get isNIL(): boolean {
@@ -54,7 +46,7 @@ export class Node {
     this._parent = Node.NIL;
     this._left = Node.NIL;
     this._right = Node.NIL;
-    this._color = NodeColor.BLACK;
+    this._black = true;
   }
 
   static readonly NIL = generateNIL();

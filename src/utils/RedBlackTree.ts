@@ -1,6 +1,35 @@
 import { Node, NodeColor, TreeNodeJSON } from "./Node";
 import { isNull, isUndefined } from "./utils";
 
+/**
+ * Credits
+ *
+ * The implementation of Red Black Tree in this project was adapted from the rbts project, created by Daniel Ly and contributors.
+ * This implementation is simplified and modified to fit the needs of this project.
+ *
+ * rbts - Typescript red-black tree
+ * GitHub Repository: https://github.com/nalply/rbts
+ *
+ * Original ISC License:
+ *
+ * The ISC License (as of 2019)
+ *
+ * Copyright © Daniel Ly and contributors.
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+
 export class RedBlackTree {
   _root: Node;
   _size: number;
@@ -19,7 +48,7 @@ export class RedBlackTree {
       }
 
       const path = tree.getInOrderTraversalPath();
- 
+
       if (!isNull(path)) {
         this._root = this.constructTreeFromJSON(path);
         this._size = tree._size;
@@ -34,7 +63,7 @@ export class RedBlackTree {
     }
 
     const newNode = new Node(parseInt(node.name));
-    newNode.setBlack = node.color === NodeColor.BLACK;
+    newNode._black = node.color === NodeColor.BLACK;
     newNode._left = this.constructTreeFromJSON(node.children?.[0]);
     newNode._right = this.constructTreeFromJSON(node.children?.[1]);
 
@@ -89,11 +118,11 @@ export class RedBlackTree {
     }
 
     this._size--;
-    let child, parent;
-    let isRed;
 
+    let child: Node, parent: Node, isRed: boolean;
     if (!node._left.isNIL && !node._right.isNIL) {
       const next = this._firstNode(node._right);
+      next._left = node._left;
       if (node === this._root) {
         this._root = next;
       } else {
@@ -102,111 +131,99 @@ export class RedBlackTree {
         } else {
           node._parent._right = next;
         }
-        child = next._right;
-        parent = next._parent;
-        isRed = next.isRed;
-        if (node === parent) {
-          parent = next;
-        } else {
-          if (!child.isNIL) {
-            child._parent = parent;
-          }
-          parent._left = child;
-          next._right = node._right;
-          node._right._parent = next;
+      }
+      child = next._right;
+      parent = next._parent;
+      isRed = next._red;
+      if (node === parent) {
+        parent = next;
+      } else {
+        if (!child.isNIL) {
+          child._parent = parent;
         }
-        next._parent = node._parent;
-        next.setBlack = node.isBlack;
-        next._left._parent = next;
-        if (isRed) {
-          return true;
-        }
+        parent._left = child;
+        next._right = node._right;
+        node._right._parent = next;
+      }
+      next._parent = node._parent;
+      next._black = node._black;
+      node._left._parent = next;
+      if (isRed) {
+        return true;
       }
     } else {
-      if (!node._left.isNIL) {
-        child = node._left;
-      } else {
-        child = node._right;
-      }
+      !node._left.isNIL ? (child = node._left) : (child = node._right);
       parent = node._parent;
-      isRed = node.isRed;
+      isRed = node._red;
       if (!child.isNIL) {
         child._parent = parent;
       }
       if (node === this._root) {
         this._root = child;
       } else {
-        if (node === parent._left) {
+        if (parent._left === node) {
           parent._left = child;
         } else {
           parent._right = child;
         }
-        if (isRed) {
-          return true;
-        }
       }
+      if (isRed) {
+        return true;
+      }
+    }
 
-      node = child;
-
-      while (node !== this._root && node.isBlack) {
-        if (node === parent._left) {
-          let other = parent._right;
-          if (other.isRed) {
-            other.setBlack = parent.setRed = true;
-            this._leftRotate(parent);
-            other = parent._right;
-          }
-
-          if (other._left.isBlack && other._right.isBlack) {
-            other.setRed = true;
-            node = parent;
-            parent = node._parent;
-            continue;
-          }
-
-          if (other._right.isBlack) {
-            other._left.setBlack = other.setRed = true;
-            this._rightRotate(other);
-            other = parent._right;
-          }
-
-          other.setBlack = parent.isBlack;
-          parent.setBlack = other._right.setBlack = true;
+    // Reinstate the red-black tree invariants after the delete
+    node = child;
+    while (node !== this._root && node._black) {
+      if (node === parent._left) {
+        let brother = parent._right;
+        if (brother._red) {
+          brother._black = parent._red = true;
           this._leftRotate(parent);
-          node = this._root;
-          break;
-        } else {
-          let other = parent._left;
-          if (other.isRed) {
-            other.setBlack = parent.setRed = true;
-            this._rightRotate(parent);
-            other = parent._left;
-          }
-
-          if (other._left.isBlack && other._right.isBlack) {
-            other.setRed = true;
-            node = parent;
-            parent = node._parent;
-            continue;
-          }
-
-          if (other._left.isBlack) {
-            other._right.setBlack = other.setRed = true;
-            this._leftRotate(other);
-            other = parent._left;
-          }
-
-          other.setBlack = parent.isBlack;
-          parent.setBlack = other._left.setBlack = true;
-          this._rightRotate(parent);
-          node = this._root;
-          break;
+          brother = parent._right;
         }
+        if (brother._left._black && brother._right._black) {
+          brother._red = true;
+          node = parent;
+          parent = node._parent;
+          continue;
+        }
+        if (brother._right._black) {
+          brother._left._black = brother._red = true;
+          this._rightRotate(brother);
+          brother = parent._right;
+        }
+        brother._black = parent._black;
+        parent._black = brother._right._black = true;
+        this._leftRotate(parent);
+        node = this._root;
+        break;
+      } else {
+        let brother = parent._left;
+        if (brother._red) {
+          brother._black = parent._red = true;
+          this._rightRotate(parent);
+          brother = parent._left;
+        }
+        if (brother._left._black && brother._right._black) {
+          brother._red = true;
+          node = parent;
+          parent = node._parent;
+          continue;
+        }
+        if (brother._left._black) {
+          brother._right._black = brother._red = true;
+          this._leftRotate(brother);
+          brother = parent._left;
+        }
+        brother._black = parent._black;
+        parent._black = brother._left._black = true;
+        this._rightRotate(parent);
+        node = this._root;
+        break;
       }
     }
-    if (!node.isNIL) {
-      node.setBlack = true;
-    }
+    if (!node.isNIL) node._black = true;
     return true;
   }
 
@@ -215,6 +232,7 @@ export class RedBlackTree {
     while (!node._left.isNIL) {
       node = node._left;
     }
+
     return node;
   }
 
@@ -258,7 +276,11 @@ export class RedBlackTree {
     parent = n = this._root;
     while (!n.isNIL) {
       parent = n;
-      n = n.key > node.key ? n._left : n._right;
+      if (n.key > node.key) {
+        n = n._left;
+      } else {
+        n = n._right;
+      }
     }
     node._parent = parent;
 
@@ -267,18 +289,15 @@ export class RedBlackTree {
     } else {
       parent._right = node;
     }
-    node.setRed = true;
+    node._red = true;
     // reinstate the red-black properties after inserting
 
-    while (node._parent.isRed) {
+    while (node._parent._red) {
       parent = node._parent;
       const grandParent = parent._parent;
       if (parent === grandParent._left) {
-        if (grandParent._right.isRed) {
-          parent.setBlack =
-            grandParent._right.setBlack =
-            grandParent.setRed =
-              true;
+        if (grandParent._right._red) {
+          parent._black = grandParent._right._black = grandParent._red = true;
           node = grandParent;
           continue;
         }
@@ -287,16 +306,13 @@ export class RedBlackTree {
           this._leftRotate(parent);
           [parent, node] = [node, parent];
         }
-        parent.setBlack = grandParent.setRed = true;
+        parent._black = grandParent._red = true;
         this._rightRotate(grandParent);
         continue;
       }
 
-      if (grandParent._left.isRed) {
-        parent.setBlack =
-          grandParent._left.setBlack =
-          grandParent.setRed =
-            true;
+      if (grandParent._left._red) {
+        parent._black = grandParent._left._black = grandParent._red = true;
         node = grandParent;
         continue;
       }
@@ -306,10 +322,10 @@ export class RedBlackTree {
         [parent, node] = [node, parent];
       }
 
-      parent.setBlack = grandParent.setRed = true;
+      parent._black = grandParent._red = true;
       this._leftRotate(grandParent);
     }
-    this._root.setBlack = true;
+    this._root._black = true;
     return this;
   }
 
@@ -322,10 +338,12 @@ export class RedBlackTree {
     child._parent = node._parent;
     if (node === this._root) {
       this._root = child;
-    } else if (node === node._parent._left) {
-      node._parent._left = child;
     } else {
-      node._parent._right = child;
+      if (node === node._parent._left) {
+        node._parent._left = child;
+      } else {
+        node._parent._right = child;
+      }
     }
     node._parent = child;
     child._left = node;
@@ -357,7 +375,7 @@ export class RedBlackTree {
 
     return {
       name: node.key.toString(),
-      color: node.isBlack ? NodeColor.BLACK : NodeColor.RED,
+      color: node._black ? NodeColor.BLACK : NodeColor.RED,
       children: [
         this.getInOrderTraversalPath(node._left),
         this.getInOrderTraversalPath(node._right),
@@ -372,8 +390,8 @@ export class RedBlackTree {
       return true;
     }
 
-    if (node.isRed) {
-      if (!node._left.isBlack || !node._right.isBlack) {
+    if (node._red) {
+      if (!node._left._black || !node._right._black) {
         return false;
       }
     }
@@ -394,7 +412,7 @@ export class RedBlackTree {
     const leftHeight = this.computeBlackHeight(node._left);
     const rightHeight = this.computeBlackHeight(node._right);
 
-    const add = node.isBlack ? 1 : 0;
+    const add = node._black ? 1 : 0;
 
     if (leftHeight === -1 || rightHeight === -1 || leftHeight !== rightHeight) {
       return -1;
@@ -409,7 +427,7 @@ export class RedBlackTree {
 
   checkIfIsRedBlackTree(): boolean {
     // The root is black
-    if (!this._root.isBlack) {
+    if (!this._root._black) {
       return false;
     }
 

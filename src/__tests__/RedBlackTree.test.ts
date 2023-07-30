@@ -1,4 +1,3 @@
-import exp from "constants";
 import { RedBlackTree } from "../utils/RedBlackTree";
 
 describe("RedBlackTree", () => {
@@ -283,7 +282,6 @@ describe("RedBlackTree", () => {
   });
 
   it("should construct a deep copy from a RedBlackTree instance", () => {
-    
     // random insert 100 numbers into the tree
     for (let i = 0; i < 100; i++) {
       rbTree.insert(Math.floor(Math.random() * 100));
@@ -309,10 +307,7 @@ describe("RedBlackTree", () => {
 
   it("could clear the tree", () => {
     // randomly generate 10 numbers as an array
-    const randomNumbers = [];
-    for (let i = 0; i < 10; i++) {
-      randomNumbers.push(Math.floor(Math.random() * 100));
-    }
+    const randomNumbers = [142, 34, 55, 76, 13, 21, 90, 451, 62, 73];
 
     // insert the numbers into the tree
     randomNumbers.forEach((number) => {
@@ -331,9 +326,23 @@ describe("RedBlackTree", () => {
     expect(rbTree.size).toBe(0);
     expect(rbTree._root.isNIL).toBe(true);
 
-    const traversalPathString = JSON.stringify( rbTree.getInOrderTraversalPath() );
+    const traversalPathString = JSON.stringify(
+      rbTree.getInOrderTraversalPath(),
+    );
     const jsonString = JSON.stringify(null);
 
     expect(traversalPathString).toBe(jsonString);
+  });
+
+  it("should be able to delete the root node and keep the rest of children", () => {
+    rbTree.insert(33);
+    rbTree.insert(22);
+    rbTree.insert(44);
+
+    rbTree.delete(33);
+    expect(rbTree.find(33)).toBeUndefined();
+    expect(rbTree.size).toBe(2);
+    expect(rbTree.find(22)).toBe(22);
+    expect(rbTree.find(44)).toBe(44);
   });
 });

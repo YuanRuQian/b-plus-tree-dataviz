@@ -8,21 +8,29 @@ import { isNull } from "../utils/utils";
 const ControlPanel = () => {
   const context = useContext(RedBlackTreeContext);
 
-  const [redBlackTreeData, setRedBlackTreeData] = useState<TreeNodeJSON>({} as TreeNodeJSON);
+  const [redBlackTreeData, setRedBlackTreeData] = useState<TreeNodeJSON>(
+    {} as TreeNodeJSON,
+  );
 
   const handleInsert = (value: number) => {
     if (!isNull(context)) {
       context.redBlackTree.insert(value);
-      setRedBlackTreeData(context.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON);
+      setRedBlackTreeData(
+        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      );
+      console.log(`Tree size: ${context.redBlackTree.size}`);
     }
   };
 
   const handleDelete = (value: number) => {
     if (!isNull(context)) {
       context.redBlackTree.delete(value);
-      setRedBlackTreeData(context.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON);
+      setRedBlackTreeData(
+        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      );
+      console.log(`Tree size: ${context.redBlackTree.size}`);
     }
-  }
+  };
 
   const handleFind = (value: number) => {
     if (!isNull(context)) {
@@ -30,15 +38,17 @@ const ControlPanel = () => {
 
       // TODO: do something with the result of find
     }
-  }
+  };
 
   const handleClearAll = () => {
     if (!isNull(context)) {
       context.redBlackTree.clear();
-      setRedBlackTreeData(context.redBlackTree.getInOrderTraversalPath() || {} as TreeNodeJSON);
+      setRedBlackTreeData(
+        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      );
+      console.log(`Tree size: ${context.redBlackTree.size}`);
     }
-  }
-
+  };
 
   return (
     <div>
