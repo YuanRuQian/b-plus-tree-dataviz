@@ -244,14 +244,23 @@ export class RedBlackTree {
   }
 
   // if find the key return node or return NIL
-  _findNode(key: number): Node {
+  _findNode(key: number, path?: Set<number>): Node {
     let current = this._root;
+
     while (!current.isNIL && current.key !== key) {
+      if (path) {
+        path.add(current.key);
+      }
+
       if (current.key > key) {
         current = current._left;
       } else {
         current = current._right;
       }
+    }
+
+    if (!current.isNIL && path && current.key === key) {
+      path.add(current.key);
     }
 
     return current.key === key ? current : Node.NIL;
@@ -367,19 +376,41 @@ export class RedBlackTree {
   }
 
   // In-order traversal method to return the tree data in JSON format
-  getInOrderTraversalPath(node: Node = this._root): TreeNodeJSON | null {
+  getInOrderTraversalPath(
+    node: Node = this._root,
+    findPath?: Set<number>,
+  ): TreeNodeJSON | null {
     if (node.isNIL) {
       return null;
     }
 
-    return {
+    const returnData = {
       name: node.key.toString(),
       color: node._black ? NodeColor.BLACK : NodeColor.RED,
       children: [
-        this.getInOrderTraversalPath(node._left),
-        this.getInOrderTraversalPath(node._right),
+        this.getInOrderTraversalPath(node._left, findPath),
+        this.getInOrderTraversalPath(node._right, findPath),
       ].filter((child) => !isNull(child)) as TreeNodeJSON[] | undefined,
     };
+
+    if (isUndefined(findPath)) {
+      return { ...returnData };
+    } else {
+      return {
+        ...returnData,
+        isOnFindPath: findPath.has(node.key),
+      };
+    }
+  }
+
+  getInOrderTraversalPathWithFindPath(key: number): TreeNodeJSON | null {
+    const path = new Set<number>();
+    const node = this._findNode(key, path);
+    if (node.isNIL) {
+      return null;
+    }
+
+    return this.getInOrderTraversalPath(this._root, path);
   }
 
   // There cannot be 2 consecutive red nodes.

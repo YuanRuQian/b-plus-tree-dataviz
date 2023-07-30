@@ -345,4 +345,116 @@ describe("RedBlackTree", () => {
     expect(rbTree.find(22)).toBe(22);
     expect(rbTree.find(44)).toBe(44);
   });
+
+  it("should get the correct path for a given key", () => {
+    rbTree.insert(10);
+    rbTree.insert(5);
+    rbTree.insert(15);
+    rbTree.insert(3);
+    rbTree.insert(7);
+    rbTree.insert(12);
+    rbTree.insert(20);
+    rbTree.insert(25);
+    rbTree.insert(22);
+
+    let findPath = new Set<number>();
+
+    // Test the find path for existing keys
+    rbTree._findNode(25, findPath);
+
+    // set should be {10, 15, 22, 25}
+    expect(findPath.size).toBe(4);
+    expect(findPath.has(10)).toBe(true);
+    expect(findPath.has(15)).toBe(true);
+    expect(findPath.has(22)).toBe(true);
+    expect(findPath.has(25)).toBe(true);
+
+    findPath.clear();
+
+    rbTree._findNode(22, findPath);
+    expect(findPath.size).toBe(3);
+    expect(findPath.has(10)).toBe(true);
+    expect(findPath.has(15)).toBe(true);
+    expect(findPath.has(22)).toBe(true);
+
+    findPath.clear();
+  });
+
+  it("should get the correct data path for a given key", () => {
+    rbTree.insert(10);
+    rbTree.insert(5);
+    rbTree.insert(15);
+    rbTree.insert(3);
+    rbTree.insert(7);
+    rbTree.insert(12);
+    rbTree.insert(20);
+    rbTree.insert(25);
+    rbTree.insert(22);
+
+    const expectedPathData = {
+      name: "10",
+      color: "black",
+      children: [
+        {
+          name: "5",
+          color: "black",
+          children: [
+            {
+              name: "3",
+              color: "red",
+              children: [],
+              isOnFindPath: false,
+            },
+            {
+              name: "7",
+              color: "red",
+              children: [],
+              isOnFindPath: false,
+            },
+          ],
+          isOnFindPath: false,
+        },
+        {
+          name: "15",
+          color: "red",
+          children: [
+            {
+              name: "12",
+              color: "black",
+              children: [],
+              isOnFindPath: false,
+            },
+            {
+              name: "22",
+              color: "black",
+              children: [
+                {
+                  name: "20",
+                  color: "red",
+                  children: [],
+                  isOnFindPath: false,
+                },
+                {
+                  name: "25",
+                  color: "red",
+                  children: [],
+                  isOnFindPath: false,
+                },
+              ],
+              isOnFindPath: true,
+            },
+          ],
+          isOnFindPath: true,
+        },
+      ],
+      isOnFindPath: true,
+    };
+    const findPathData = rbTree.getInOrderTraversalPathWithFindPath(22);
+
+    const traversalPathString = JSON.stringify(findPathData);
+
+    const jsonString = JSON.stringify(expectedPathData);
+
+    expect(traversalPathString).toBe(jsonString);
+  });
 });
