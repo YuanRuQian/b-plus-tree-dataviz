@@ -5,23 +5,21 @@ import Tree, {
   TreeLinkDatum,
 } from "react-d3-tree";
 import PureSvgNodeElement from "./PureSVGNode";
+import { SNAPSHOT_CHANGE_INTERVAL } from "../utils/constants";
 
 type TreeChartProps = {
   redBlackTreeData: RawNodeDatum;
 };
 
 const TreeChart = ({ redBlackTreeData }: TreeChartProps) => {
-
   const treeContainerRef = useRef<HTMLDivElement>(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [size, setSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    
     setSize({ width: window.innerWidth, height: window.innerHeight });
-    setTranslate({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    setTranslate({ x: window.innerWidth / 2, y: window.innerHeight / 4 });
   }, []);
-
 
   if (JSON.stringify(redBlackTreeData) === JSON.stringify({})) return <></>;
 
@@ -41,18 +39,21 @@ const TreeChart = ({ redBlackTreeData }: TreeChartProps) => {
 
   // TODO: proper transformation of tree data
   return (
-    <div ref={treeContainerRef} style={{ width: size.width, height: size.height }}>
-    <Tree
-      orientation="vertical"
-      translate={translate}
-      data={redBlackTreeData}
-      renderCustomNodeElement={renderCustomNodeElement}
-      pathClassFunc={getDynamicPathClass}
-    />
+    <div
+      ref={treeContainerRef}
+      style={{ width: size.width, height: size.height }}
+    >
+      <Tree
+        orientation="vertical"
+        enableLegacyTransitions
+        transitionDuration={SNAPSHOT_CHANGE_INTERVAL}
+        translate={translate}
+        data={redBlackTreeData}
+        renderCustomNodeElement={renderCustomNodeElement}
+        pathClassFunc={getDynamicPathClass}
+      />
     </div>
   );
 };
 
-
 export default TreeChart;
-
