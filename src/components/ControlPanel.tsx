@@ -3,7 +3,7 @@ import AppBar from "./AppBar";
 import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
 import { isNull, isUndefined } from "../utils/utils";
 import { Alert, Snackbar } from "@mui/material";
-import { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree";
+import { RawNodeDatum } from "react-d3-tree";
 import TreeChart from "./TreeChart";
 
 const ControlPanel = () => {

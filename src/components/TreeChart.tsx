@@ -1,5 +1,9 @@
 import React from "react";
-import Tree, { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree";
+import Tree, {
+  CustomNodeElementProps,
+  RawNodeDatum,
+  TreeLinkDatum,
+} from "react-d3-tree";
 import PureSvgNodeElement from "./PureSVGNode";
 
 type TreeChartProps = {
@@ -13,11 +17,23 @@ const TreeChart = ({ redBlackTreeData }: TreeChartProps) => {
     <PureSvgNodeElement nodeDatum={nodeDatum} orientation="vertical" />
   );
 
+  const getDynamicPathClass = (link: TreeLinkDatum): string => {
+    const { target } = link;
+
+    if (target.data.attributes?.isOnFindPath) {
+      return "link__highlighted";
+    }
+
+    return "link__default";
+  };
+
   // TODO: proper transformation of tree data
   return (
     <Tree
+      orientation="vertical"
       data={redBlackTreeData}
       renderCustomNodeElement={renderCustomNodeElement}
+      pathClassFunc={getDynamicPathClass}
     />
   );
 };
