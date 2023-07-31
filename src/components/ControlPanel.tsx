@@ -28,6 +28,14 @@ const ControlPanel = () => {
 
   const handleInsert = (value: number) => {
     if (!isNull(context)) {
+
+      const foundNode = context.redBlackTree.find(value);
+
+      if(!isUndefined(foundNode)) {
+        showSnackbarMessage(`Node ${value} already exists! Insert failed.`);
+        return;
+      }
+
       context.redBlackTree.insert(value);
       setRedBlackTreeData(
         context.redBlackTree.getInOrderTraversalPath() || ({} as RawNodeDatum),
