@@ -3,7 +3,7 @@ import useResizeObserver from "../utils/useResizeObserver";
 import { hierarchy, tree as Tree, zoom, select, HierarchyPointNode } from "d3";
 import { Graph, GraphNode, Layout } from "./type";
 import Node from "./Node";
-import Connector from "./Link";
+import Link from "./Link";
 
 type Props = {
   data: Graph;
@@ -82,11 +82,12 @@ export default function FatTree({ data }: Props) {
           {delta?.tree
             ?.links()
             .map((link) => (
-              <Connector
+              <Link
                 key={`${link.source.data.name}-${link.target.data.name}-link`}
                 link={link}
                 selected={selectedNode}
                 selectedAncestors={selectedAncestors}
+                isTargetNodeOnFindPath={link.target.data.isOnFindPath}
               />
             ))}
           {delta?.tree

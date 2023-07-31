@@ -1,11 +1,6 @@
-import { NodeColor } from "../utils/RedBlackTreeNode";
+import { TreeNodeJSON } from "../utils/RedBlackTreeNode";
 
-export interface Graph {
-  name: string;
-  color: NodeColor;
-  onHighlightPath?: boolean;
-  children?: Graph[];
-}
+export interface Graph extends TreeNodeJSON {}
 
 export const Layout = Object.freeze({
   NODE_HEIGHT: 75,
