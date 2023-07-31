@@ -11,3 +11,53 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.fizz-node {
+    height: 100%;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 1rem;
+    border-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgba(217,119,6,var(--tw-border-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgba(243,244,246,var(--tw-bg-opacity));
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.fizz-node:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgba(249, 180, 45,var(--tw-bg-opacity))
+}
+
+.fizz-node:active {
+    --tw-bg-opacity: 1;
+    background-color: rgba(255, 148, 112,var(--tw-bg-opacity))
+}
+
+.fizz-node {
+    --tw-bg-opacity: 0.9;
+    padding: .25rem
+}
+
+.fizz-node-red {
+    background-color: rgba(255,0,0,var(--tw-bg-opacity))
+}
+
+.fizz-node-black {
+    background-color: rgba(0,0,0,var(--tw-bg-opacity))
+}
+
+.height-width-full-parent {
+    height: 100%;
+    width: 100%;
+}

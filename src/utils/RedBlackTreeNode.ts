@@ -6,6 +6,7 @@ export enum NodeColor {
 export interface TreeNodeJSON {
   name: string;
   color: NodeColor;
+  isOnFindPath?: boolean;
   children?: TreeNodeJSON[];
 }
 
