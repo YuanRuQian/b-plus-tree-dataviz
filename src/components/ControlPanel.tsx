@@ -4,7 +4,7 @@ import { TreeNodeJSON } from "../utils/RedBlackTreeNode";
 import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
 import { isNull, isUndefined } from "../utils/utils";
 import Graph from "./Graph";
-import { Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 
 const ControlPanel = () => {
   const context = useContext(RedBlackTreeContext);
@@ -16,7 +16,7 @@ const ControlPanel = () => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const closeSnackbar = (event: React.SyntheticEvent | Event) => {
+  const handleCloseSnackbarMessage = (event: React.SyntheticEvent | Event) => {
     setShowSnackbar(false);
     setSnackbarMessage("");
   };
@@ -44,7 +44,7 @@ const ControlPanel = () => {
     const deleteResult = context.redBlackTree.delete(value);
 
     if (!deleteResult) {
-      showSnackbarMessage(`Value ${value} not found!`);
+      showSnackbarMessage(`Node ${value} does not exist, delete failed.`);
       return;
     }
 
@@ -60,7 +60,7 @@ const ControlPanel = () => {
 
       // if value not found, show snackbar to notify user
       if (isUndefined(findResult)) {
-        showSnackbarMessage(`Value ${value} not found!`);
+        showSnackbarMessage(`Node ${value} is not found!`);
         return;
       }
 
@@ -91,10 +91,17 @@ const ControlPanel = () => {
       <Snackbar
         open={showSnackbar}
         autoHideDuration={6000}
-        onClose={closeSnackbar}
-        message={snackbarMessage}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      />
+        onClose={handleCloseSnackbarMessage}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbarMessage}
+          severity="warning"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <Graph data={redBlackTreeData} />
     </div>
   );

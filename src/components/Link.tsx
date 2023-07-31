@@ -13,11 +13,7 @@ const linkGenerator = linkHorizontal<HierarchyLink<GraphNode>, GraphNode>()
   .x((node) => node.x || 0)
   .y((node) => node.y || 0);
 
-export default function Connector({
-  link,
-  selected,
-  selectedAncestors,
-}: Props) {
+const Link = ({ link, selected, selectedAncestors }: Props) => {
   const isHot = selectedAncestors?.some(
     (v) => v.data.name === link.target.data.name,
   );
@@ -29,4 +25,6 @@ export default function Connector({
       strokeWidth={isHot ? 2 : 1}
     />
   );
-}
+};
+
+export default Link;

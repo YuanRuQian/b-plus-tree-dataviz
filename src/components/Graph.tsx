@@ -3,7 +3,7 @@ import useResizeObserver from "../utils/useResizeObserver";
 import { hierarchy, tree as Tree, zoom, select, HierarchyPointNode } from "d3";
 import { Graph, GraphNode, Layout } from "./type";
 import Node from "./Node";
-import Connector from "./Connector";
+import Connector from "./Link";
 
 type Props = {
   data: Graph;
@@ -96,6 +96,7 @@ export default function FatTree({ data }: Props) {
                 key={`${node.data.name}-node`}
                 node={node}
                 selected={selectedNode}
+                onSelected={handleSelectedNode}
               />
             ))}
         </g>
