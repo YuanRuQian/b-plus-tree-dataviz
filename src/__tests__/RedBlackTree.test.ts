@@ -28,16 +28,16 @@ describe("RedBlackTree", () => {
 
     const json = {
       name: "10",
-      color: "black",
+      attributes: { color: "black" },
       children: [
         {
           name: "5",
-          color: "red",
+          attributes: { color: "red" },
           children: [],
         },
         {
           name: "15",
-          color: "red",
+          attributes: { color: "red" },
           children: [],
         },
       ],
@@ -76,11 +76,11 @@ describe("RedBlackTree", () => {
 
     const json = {
       name: "10",
-      color: "black",
+      attributes: { color: "black" },
       children: [
         {
           name: "15",
-          color: "red",
+          attributes: { color: "red" },
           children: [],
         },
       ],
@@ -138,43 +138,26 @@ describe("RedBlackTree", () => {
 
     const json = {
       name: "10",
-      color: "black",
+      attributes: { color: "black" },
       children: [
         {
           name: "5",
-          color: "red",
+          attributes: { color: "red" },
           children: [
-            {
-              name: "3",
-              color: "black",
-              children: [],
-            },
+            { name: "3", attributes: { color: "black" }, children: [] },
             {
               name: "7",
-              color: "black",
+              attributes: { color: "black" },
               children: [
-                {
-                  name: "6",
-                  color: "red",
-                  children: [],
-                },
-                {
-                  name: "8",
-                  color: "red",
-                  children: [],
-                },
+                { name: "6", attributes: { color: "red" }, children: [] },
+                { name: "8", attributes: { color: "red" }, children: [] },
               ],
             },
           ],
         },
-        {
-          name: "15",
-          color: "black",
-          children: [],
-        },
+        { name: "15", attributes: { color: "black" }, children: [] },
       ],
     };
-
     const traversalPathString = JSON.stringify(
       rbTree.getInOrderTraversalPath(),
     );
@@ -235,43 +218,26 @@ describe("RedBlackTree", () => {
 
     const json = {
       name: "10",
-      color: "black",
+      attributes: { color: "black" },
       children: [
-        {
-          name: "7",
-          color: "black",
-          children: [],
-        },
+        { name: "7", attributes: { color: "black" }, children: [] },
         {
           name: "15",
-          color: "red",
+          attributes: { color: "red" },
           children: [
-            {
-              name: "12",
-              color: "black",
-              children: [],
-            },
+            { name: "12", attributes: { color: "black" }, children: [] },
             {
               name: "22",
-              color: "black",
+              attributes: { color: "black" },
               children: [
-                {
-                  name: "20",
-                  color: "red",
-                  children: [],
-                },
-                {
-                  name: "25",
-                  color: "red",
-                  children: [],
-                },
+                { name: "20", attributes: { color: "red" }, children: [] },
+                { name: "25", attributes: { color: "red" }, children: [] },
               ],
             },
           ],
         },
       ],
     };
-
     const traversalPathString = JSON.stringify(
       rbTree.getInOrderTraversalPath(),
     );
@@ -393,61 +359,52 @@ describe("RedBlackTree", () => {
 
     const expectedPathData = {
       name: "10",
-      color: "black",
+      attributes: { color: "black", isOnFindPath: true },
       children: [
         {
           name: "5",
-          color: "black",
+          attributes: { color: "black", isOnFindPath: false },
           children: [
             {
               name: "3",
-              color: "red",
+              attributes: { color: "red", isOnFindPath: false },
               children: [],
-              isOnFindPath: false,
             },
             {
               name: "7",
-              color: "red",
+              attributes: { color: "red", isOnFindPath: false },
               children: [],
-              isOnFindPath: false,
             },
           ],
-          isOnFindPath: false,
         },
         {
           name: "15",
-          color: "red",
+          attributes: { color: "red", isOnFindPath: true },
           children: [
             {
               name: "12",
-              color: "black",
+              attributes: { color: "black", isOnFindPath: false },
               children: [],
-              isOnFindPath: false,
             },
             {
               name: "22",
-              color: "black",
+              attributes: { color: "black", isOnFindPath: true },
               children: [
                 {
                   name: "20",
-                  color: "red",
+                  attributes: { color: "red", isOnFindPath: false },
                   children: [],
-                  isOnFindPath: false,
                 },
                 {
                   name: "25",
-                  color: "red",
+                  attributes: { color: "red", isOnFindPath: false },
                   children: [],
-                  isOnFindPath: false,
                 },
               ],
-              isOnFindPath: true,
             },
           ],
-          isOnFindPath: true,
         },
       ],
-      isOnFindPath: true,
     };
     const findPathData = rbTree.getInOrderTraversalPathWithFindPath(22);
 
