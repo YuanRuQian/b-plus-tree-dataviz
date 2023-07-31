@@ -47,5 +47,5 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Testing
 
-Run `yarn test --watchAll`.
+Run `yarn test`.
 
