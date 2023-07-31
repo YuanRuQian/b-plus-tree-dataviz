@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import useResizeObserver from "../utils/useResizeObserver";
-import { hierarchy, tree as Tree, zoom, select, HierarchyPointNode } from "d3";
+import { hierarchy, tree as Tree, zoom, select } from "d3";
 import { Graph, GraphNode, Layout } from "./type";
 import Node from "./Node";
 import Link from "./Link";
@@ -14,10 +14,6 @@ export default function FatTree({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const dimension = useResizeObserver(wrapperRef);
-  const [selectedNode, setSelectedNode] =
-    useState<HierarchyPointNode<GraphNode>>();
-  const [selectedAncestors, setSelectedAncestors] =
-    useState<HierarchyPointNode<GraphNode>[]>();
 
   const delta = React.useMemo(() => {
     if (dimension && data) {
@@ -58,17 +54,6 @@ export default function FatTree({ data }: Props) {
     }
   }, [dimension, data]);
 
-  const handleSelectedNode = (node: HierarchyPointNode<GraphNode>) => {
-    // double click on the same node, reset the selected node
-    if (node === selectedNode) {
-      setSelectedAncestors([]);
-      setSelectedNode(undefined);
-    } else {
-      setSelectedAncestors(node.ancestors());
-      setSelectedNode(node);
-    }
-  };
-
   // if only has one node ( NIL node ), it's an empty tree
   if (!data || JSON.stringify(data) === "{}") {
     return <div className="height-width-full-parent" ref={wrapperRef}></div>;
@@ -89,21 +74,12 @@ export default function FatTree({ data }: Props) {
               <Link
                 key={`${link.source.data.name}-${link.target.data.name}-link`}
                 link={link}
-                selected={selectedNode}
-                selectedAncestors={selectedAncestors}
                 isTargetNodeOnFindPath={link.target.data.isOnFindPath}
               />
             ))}
           {delta?.tree
             ?.descendants()
-            .map((node) => (
-              <Node
-                key={`${node.data.name}-node`}
-                node={node}
-                selected={selectedNode}
-                onSelected={handleSelectedNode}
-              />
-            ))}
+            .map((node) => <Node key={`${node.data.name}-node`} node={node} />)}
         </g>
       </svg>
     </div>
