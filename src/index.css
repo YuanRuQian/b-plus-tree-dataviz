@@ -68,6 +68,6 @@ code {
 
 .link__highlighted {
     fill: none;
-    stroke: #FF0000;
+    stroke: #FF0000 !important;
     stroke-width: 5px;
 }
