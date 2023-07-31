@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
 import AppBar from "./AppBar";
-import { TreeNodeJSON } from "../utils/RedBlackTreeNode";
 import { RedBlackTreeContext } from "../context/RedBlackTreeContext";
 import { isNull, isUndefined } from "../utils/utils";
-import Graph from "./Graph";
 import { Alert, Snackbar } from "@mui/material";
+import { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree";
+import TreeChart from "./TreeChart";
 
 const ControlPanel = () => {
   const context = useContext(RedBlackTreeContext);
 
-  const [redBlackTreeData, setRedBlackTreeData] = useState<TreeNodeJSON>(
-    {} as TreeNodeJSON,
+  const [redBlackTreeData, setRedBlackTreeData] = useState<RawNodeDatum>(
+    {} as RawNodeDatum,
   );
 
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -30,7 +30,7 @@ const ControlPanel = () => {
     if (!isNull(context)) {
       context.redBlackTree.insert(value);
       setRedBlackTreeData(
-        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+        context.redBlackTree.getInOrderTraversalPath() || ({} as RawNodeDatum),
       );
       console.log(`Tree size: ${context.redBlackTree.size}`);
     }
@@ -49,7 +49,7 @@ const ControlPanel = () => {
     }
 
     setRedBlackTreeData(
-      context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+      context.redBlackTree.getInOrderTraversalPath() || ({} as RawNodeDatum),
     );
     console.log(`Tree size: ${context.redBlackTree.size}`);
   };
@@ -66,7 +66,7 @@ const ControlPanel = () => {
 
       const newRedBlackTreeData =
         context.redBlackTree.getInOrderTraversalPathWithFindPath(value);
-      setRedBlackTreeData(newRedBlackTreeData || ({} as TreeNodeJSON));
+      setRedBlackTreeData(newRedBlackTreeData || ({} as RawNodeDatum));
     }
   };
 
@@ -74,7 +74,7 @@ const ControlPanel = () => {
     if (!isNull(context)) {
       context.redBlackTree.clear();
       setRedBlackTreeData(
-        context.redBlackTree.getInOrderTraversalPath() || ({} as TreeNodeJSON),
+        context.redBlackTree.getInOrderTraversalPath() || ({} as RawNodeDatum),
       );
       console.log(`Tree size: ${context.redBlackTree.size}`);
     }
@@ -102,7 +102,7 @@ const ControlPanel = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Graph data={redBlackTreeData} />
+      <TreeChart redBlackTreeData={redBlackTreeData} />
     </div>
   );
 };

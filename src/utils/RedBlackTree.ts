@@ -1,4 +1,5 @@
-import { Node, NodeColor, TreeNodeJSON } from "./RedBlackTreeNode";
+import { RawNodeDatum } from "react-d3-tree";
+import { Node, NodeColor } from "./RedBlackTreeNode";
 import { isNull, isUndefined } from "./utils";
 
 /**
@@ -56,13 +57,13 @@ export class RedBlackTree {
   }
 
   // construct tree with the exact left / right subtree with the given node ( same color )
-  constructTreeFromJSON(node: TreeNodeJSON | undefined): Node {
+  constructTreeFromJSON(node: RawNodeDatum | undefined): Node {
     if (isUndefined(node)) {
       return Node.NIL;
     }
 
     const newNode = new Node(parseInt(node.name));
-    newNode._black = node.color === NodeColor.BLACK;
+    newNode._black = node.attributes!.color === NodeColor.BLACK;
     newNode._left = this.constructTreeFromJSON(node.children?.[0]);
     newNode._right = this.constructTreeFromJSON(node.children?.[1]);
 
@@ -379,18 +380,20 @@ export class RedBlackTree {
   getInOrderTraversalPath(
     node: Node = this._root,
     findPath?: Set<number>,
-  ): TreeNodeJSON | null {
+  ): RawNodeDatum | null {
     if (node.isNIL) {
       return null;
     }
 
     const returnData = {
       name: node.key.toString(),
-      color: node._black ? NodeColor.BLACK : NodeColor.RED,
+      attributes: {
+        color: node._black ? NodeColor.BLACK : NodeColor.RED,
+      },
       children: [
         this.getInOrderTraversalPath(node._left, findPath),
         this.getInOrderTraversalPath(node._right, findPath),
-      ].filter((child) => !isNull(child)) as TreeNodeJSON[] | undefined,
+      ].filter((child) => !isNull(child)) as RawNodeDatum[] | undefined,
     };
 
     if (isUndefined(findPath)) {
@@ -398,12 +401,15 @@ export class RedBlackTree {
     } else {
       return {
         ...returnData,
-        isOnFindPath: findPath.has(node.key),
+        attributes: {
+          ...returnData.attributes,
+          isOnFindPath: findPath.has(node.key),
+        },
       };
     }
   }
 
-  getInOrderTraversalPathWithFindPath(key: number): TreeNodeJSON | null {
+  getInOrderTraversalPathWithFindPath(key: number): RawNodeDatum | null {
     const path = new Set<number>();
     const node = this._findNode(key, path);
     if (node.isNIL) {

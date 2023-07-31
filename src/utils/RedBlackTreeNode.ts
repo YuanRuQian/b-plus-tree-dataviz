@@ -3,13 +3,6 @@ export enum NodeColor {
   BLACK = "black",
 }
 
-export interface TreeNodeJSON {
-  name: string;
-  color: NodeColor;
-  isOnFindPath?: boolean;
-  children?: TreeNodeJSON[];
-}
-
 const generateNIL = (): Node => {
   const nil = new Node(-1);
   nil._parent = nil;
