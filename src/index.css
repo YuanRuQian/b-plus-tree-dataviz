@@ -57,3 +57,7 @@ code {
     background-color: rgba(0,0,0,var(--tw-bg-opacity))
 }
 
+.height-width-full-parent {
+    height: 100%;
+    width: 100%;
+}

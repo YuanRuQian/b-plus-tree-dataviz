@@ -63,21 +63,19 @@ export default function FatTree({ data }: Props) {
     setSelectedNode(node);
   };
 
-  const style = {
-    width: "100%",
-    height: "100%",
-    overflow: "hidden",
-  };
-
   // if only has one node ( NIL node ), it's an empty tree
   if (!data || JSON.stringify(data) === "{}") {
-    return <div className="h-full" style={style} ref={wrapperRef}></div>;
+    return <div className="height-width-full-parent" ref={wrapperRef}></div>;
   }
 
-  // TODO: fix width & height resize
+  // TODO: fix width & height resize, make svg full screen
   return (
-    <div className="h-full" style={style} ref={wrapperRef}>
-      <svg ref={svgRef} width={1000} height={800}>
+    <div className="height-width-full-parent" ref={wrapperRef}>
+      <svg
+        ref={svgRef}
+        width={800}  // Set the width to 100% of the parent container
+        height={800} // Set the height to 100% of the parent container
+      >
         <g className="content-wrapper">
           {delta?.tree
             ?.links()
