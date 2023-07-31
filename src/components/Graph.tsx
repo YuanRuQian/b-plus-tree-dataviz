@@ -59,8 +59,14 @@ export default function FatTree({ data }: Props) {
   }, [dimension, data]);
 
   const handleSelectedNode = (node: HierarchyPointNode<GraphNode>) => {
-    setSelectedAncestors(node.ancestors());
-    setSelectedNode(node);
+    // double click on the same node, reset the selected node
+    if (node === selectedNode) {
+      setSelectedAncestors([]);
+      setSelectedNode(undefined);
+    } else {
+      setSelectedAncestors(node.ancestors());
+      setSelectedNode(node);
+    }
   };
 
   // if only has one node ( NIL node ), it's an empty tree
@@ -73,7 +79,7 @@ export default function FatTree({ data }: Props) {
     <div className="height-width-full-parent" ref={wrapperRef}>
       <svg
         ref={svgRef}
-        width={800}  // Set the width to 100% of the parent container
+        width={800} // Set the width to 100% of the parent container
         height={800} // Set the height to 100% of the parent container
       >
         <g className="content-wrapper">

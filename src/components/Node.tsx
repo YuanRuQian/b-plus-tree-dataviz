@@ -18,7 +18,7 @@ const Node = ({ node, selected, onSelected }: Props) => {
       key={`${node.data.name}-foreign-object`}
       width={Layout.NODE_WIDTH}
       height={Layout.NODE_HEIGHT}
-      x={node.x - Layout.NODE_WIDTH}
+      x={node.x - Layout.NODE_WIDTH / 2}
       y={node.y - Layout.NODE_HEIGHT / 2}
     >
       <div
