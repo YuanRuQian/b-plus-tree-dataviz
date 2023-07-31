@@ -105,6 +105,7 @@ const AppBar: React.FC<AppBarProps> = ({
         <Toolbar
           disableGutters
           style={{
+            margin: "0.5rem 10rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
