@@ -16,6 +16,7 @@
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "d3": "^7.8.5",
+    "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-d3-tree": "^3.6.1",
     "react-dom": "^18.2.0",
@@ -25,6 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll",
@@ -64,5 +67,6 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^3.0.0"
-  }
+  },
+  "homepage": "https://yuanruqian.github.io/red-black-tree-dataviz/"
 }
