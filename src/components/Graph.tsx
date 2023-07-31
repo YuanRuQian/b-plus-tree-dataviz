@@ -18,12 +18,12 @@ export default function FatTree({ data }: Props) {
   const delta = React.useMemo(() => {
     if (dimension && data) {
       const _node = hierarchy(data);
-      const margin = { top: 25, right: 150, bottom: 25, left: 150 };
+      const margin = { top: 0, right: 150, bottom: 0, left: 150 };
       const innerWidth = dimension.width - margin.right - margin.left;
       const innerHeight = dimension.height - margin.top - margin.bottom;
 
       const treeLayout = Tree<GraphNode>().nodeSize([
-        Layout.LENGTH_BETWEEN_CHILDREN,
+        Layout.LENGTH_BETWEEN_CHILDREN / 2,
         Layout.LENGTH_BETWEEN_PARENT_CHILD,
       ]);
       const tree = treeLayout(_node);
@@ -33,7 +33,7 @@ export default function FatTree({ data }: Props) {
         .select(".content-wrapper")
         .attr(
           "transform",
-          `translate(${margin.left}, ${dimension.height / 2})`,
+          `translate(${margin.left}, ${dimension.height / 8})`,
         );
 
       // Specify the correct type for the zoom behavior
@@ -61,11 +61,15 @@ export default function FatTree({ data }: Props) {
 
   // TODO: fix width & height resize, make svg full screen
   return (
-    <div className="height-width-full-parent" ref={wrapperRef}>
+    <div
+      className="height-width-full-parent"
+      style={{ margin: "1rem" }}
+      ref={wrapperRef}
+    >
       <svg
         ref={svgRef}
-        width={800} // Set the width to 100% of the parent container
-        height={800} // Set the height to 100% of the parent container
+        width={dimension?.width} // Set the width to 100% of the parent container
+        height={dimension?.width} // Set the height to 100% of the parent container
       >
         <g className="content-wrapper">
           {delta?.tree
