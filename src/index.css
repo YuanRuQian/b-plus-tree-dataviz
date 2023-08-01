@@ -71,3 +71,8 @@ code {
     stroke: #FF0000 !important;
     stroke-width: 5px;
 }
+
+.link__dummy {
+    fill: none;
+    stroke-width: 0px;
+}
