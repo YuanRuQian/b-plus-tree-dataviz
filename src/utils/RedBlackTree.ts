@@ -67,7 +67,7 @@ export class RedBlackTree {
 
   // construct tree with the exact left / right subtree with the given node ( same color )
   constructTreeFromJSON(node: RawNodeDatum | undefined): Node {
-    if (isUndefined(node)) {
+    if (isUndefined(node) || node.attributes?.isDummyNode) {
       return Node.NIL;
     }
 

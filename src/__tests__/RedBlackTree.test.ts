@@ -76,11 +76,23 @@ describe("RedBlackTree", () => {
 
     const json = {
       name: "10",
-      attributes: { color: "black" },
+      attributes: {
+        color: "black",
+      },
       children: [
         {
+          name: "",
+          attributes: {
+            color: "",
+            isDummyNode: true,
+          },
+          children: [],
+        },
+        {
           name: "15",
-          attributes: { color: "red" },
+          attributes: {
+            color: "red",
+          },
           children: [],
         },
       ],
@@ -89,6 +101,7 @@ describe("RedBlackTree", () => {
       rbTree.getInOrderTraversalPath(),
     );
     const jsonString = JSON.stringify(json);
+
     expect(traversalPathString).toBe(jsonString);
   });
 
