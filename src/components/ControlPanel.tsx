@@ -16,6 +16,8 @@ const ControlPanel = () => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  const [transitionDuration, setTransitionDuration] = useState(1000);
+
   const handleCloseSnackbarMessage = (event: React.SyntheticEvent | Event) => {
     setShowSnackbar(false);
     setSnackbarMessage("");
@@ -87,6 +89,17 @@ const ControlPanel = () => {
     }
   };
 
+  const handleTransitionDurationChange = (transitionDuration: number) => {
+    if (transitionDuration <= 0) {
+      showSnackbarMessage(
+        `Transition duration must be greater than 0! Please retry.`,
+      );
+      return;
+    }
+
+    setTransitionDuration(transitionDuration);
+  };
+
   return (
     <div>
       <AppBar
@@ -94,6 +107,7 @@ const ControlPanel = () => {
         handleDelete={handleDelete}
         handleFind={handleFind}
         handleClearAll={handleClearAll}
+        handleTransitionDurationChange={handleTransitionDurationChange}
       />
       <Snackbar
         open={showSnackbar}
@@ -109,7 +123,10 @@ const ControlPanel = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <TreeChart redBlackTreeData={redBlackTreeData} />
+      <TreeChart
+        redBlackTreeData={redBlackTreeData}
+        transitionDuration={transitionDuration}
+      />
     </div>
   );
 };

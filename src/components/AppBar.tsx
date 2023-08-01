@@ -15,6 +15,7 @@ type AppBarProps = {
   handleDelete: (value: number) => void;
   handleFind: (value: number) => void;
   handleClearAll: () => void;
+  handleTransitionDurationChange: (value: number) => void;
 };
 
 type CustomButtonProps = {
@@ -71,6 +72,7 @@ const AppBar: React.FC<AppBarProps> = ({
   handleDelete,
   handleFind,
   handleClearAll,
+  handleTransitionDurationChange,
 }) => {
   const [input, setInput] = React.useState<number | undefined>(undefined);
 
@@ -102,6 +104,14 @@ const AppBar: React.FC<AppBarProps> = ({
     }
   };
 
+  const handleSetTransitionDurationButtonClick = () => {
+    if (!isUndefined(input)) {
+      handleTransitionDurationChange(input);
+      setInput(undefined);
+      console.log(`Setting transition duration to ${input} ms`);
+    }
+  };
+
   const InsertButtonWithInput = () => (
     <CustomButton onClick={handleInsertButtonClick} buttonLabel="Insert" />
   );
@@ -118,13 +128,20 @@ const AppBar: React.FC<AppBarProps> = ({
     <CustomButton onClick={handleClearAll} buttonLabel="Clear All" />
   );
 
+  const SetTransitionDurationButton = () => (
+    <CustomButton
+      onClick={handleSetTransitionDurationButtonClick}
+      buttonLabel="Set Animation Speed (ms)"
+    />
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <MuiAppBar position="sticky" color="transparent">
         <Toolbar
           disableGutters
           style={{
-            margin: "0.5rem 8rem",
+            margin: "0.5rem 4rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -139,6 +156,7 @@ const AppBar: React.FC<AppBarProps> = ({
           <DeleteButtonWithInput />
           <FindButtonWithInput />
           <ClearAllButton />
+          <SetTransitionDurationButton />
           <GitHubLinkButton />
         </Toolbar>
       </MuiAppBar>
