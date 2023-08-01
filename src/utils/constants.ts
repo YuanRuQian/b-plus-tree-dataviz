@@ -1,1 +1,0 @@
-export const SNAPSHOT_CHANGE_INTERVAL = 1000;
