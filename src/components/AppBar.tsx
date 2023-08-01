@@ -5,8 +5,10 @@ import {
   Button,
   TextField,
   Box,
+  Tooltip,
 } from "@mui/material";
 import { isUndefined } from "../utils/utils";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 type AppBarProps = {
   handleInsert: (value: number) => void;
@@ -46,6 +48,23 @@ const CustomNumberInput = ({
     onChange={onChange}
   />
 );
+
+const GitHubLinkButton = () => {
+  const handleOpenGithubRepo = () => {
+    window.open(
+      "https://github.com/YuanRuQian/red-black-tree-dataviz",
+      "_blank",
+    );
+  };
+
+  return (
+    <Tooltip title="Click to view the source code on GitHub" arrow>
+      <Button onClick={handleOpenGithubRepo}>
+        <GitHubIcon fontSize="large" color="action" />
+      </Button>
+    </Tooltip>
+  );
+};
 
 const AppBar: React.FC<AppBarProps> = ({
   handleInsert,
@@ -105,7 +124,7 @@ const AppBar: React.FC<AppBarProps> = ({
         <Toolbar
           disableGutters
           style={{
-            margin: "0.5rem 10rem",
+            margin: "0.5rem 8rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -120,6 +139,7 @@ const AppBar: React.FC<AppBarProps> = ({
           <DeleteButtonWithInput />
           <FindButtonWithInput />
           <ClearAllButton />
+          <GitHubLinkButton />
         </Toolbar>
       </MuiAppBar>
     </Box>
