@@ -28,10 +28,9 @@ const ControlPanel = () => {
 
   const handleInsert = (value: number) => {
     if (!isNull(context)) {
-
       const foundNode = context.redBlackTree.find(value);
 
-      if(!isUndefined(foundNode)) {
+      if (!isUndefined(foundNode)) {
         showSnackbarMessage(`Node ${value} already exists! Insert failed.`);
         return;
       }
