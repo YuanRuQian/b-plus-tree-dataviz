@@ -49,6 +49,10 @@ const TreeChart = ({
   const getDynamicPathClass = (link: TreeLinkDatum): string => {
     const { target } = link;
 
+    if (target.data.attributes?.isDummyNode) {
+      return "link__dummy";
+    }
+
     if (target.data.attributes?.isOnFindPath) {
       return "link__highlighted";
     }

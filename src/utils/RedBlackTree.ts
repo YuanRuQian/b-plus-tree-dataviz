@@ -2,6 +2,15 @@ import { RawNodeDatum } from "react-d3-tree";
 import { Node, NodeColor } from "./RedBlackTreeNode";
 import { isNull, isUndefined } from "./utils";
 
+const DummyNodeJSON: RawNodeDatum = {
+  name: "",
+  attributes: {
+    color: "",
+    isDummyNode: true,
+  },
+  children: [],
+};
+
 /**
  * Credits
  *
@@ -58,7 +67,7 @@ export class RedBlackTree {
 
   // construct tree with the exact left / right subtree with the given node ( same color )
   constructTreeFromJSON(node: RawNodeDatum | undefined): Node {
-    if (isUndefined(node)) {
+    if (isUndefined(node) || node.attributes?.isDummyNode) {
       return Node.NIL;
     }
 
@@ -179,8 +188,10 @@ export class RedBlackTree {
         let brother = parent._right;
         if (brother._red) {
           brother._black = parent._red = true;
+          console.log("before left rotate");
           this._leftRotate(parent);
           brother = parent._right;
+          console.log("after left rotate");
         }
         if (brother._left._black && brother._right._black) {
           brother._red = true;
@@ -193,10 +204,12 @@ export class RedBlackTree {
           this._rightRotate(brother);
           brother = parent._right;
         }
+        console.log("before left rotate");
         brother._black = parent._black;
         parent._black = brother._right._black = true;
         this._leftRotate(parent);
         node = this._root;
+        console.log("after left rotate");
         break;
       } else {
         let brother = parent._left;
@@ -212,9 +225,11 @@ export class RedBlackTree {
           continue;
         }
         if (brother._left._black) {
+          console.log("before left rotate");
           brother._right._black = brother._red = true;
           this._leftRotate(brother);
           brother = parent._left;
+          console.log("after left rotate");
         }
         brother._black = parent._black;
         parent._black = brother._left._black = true;
@@ -385,15 +400,27 @@ export class RedBlackTree {
       return null;
     }
 
+    let leftNode = this.getInOrderTraversalPath(node._left, findPath);
+    let rightNode = this.getInOrderTraversalPath(node._right, findPath);
+
+    // if one of the child is null, then set the null node to be a dummy node for visualization
+    // so the d3 tree could draw the other node's position right
+    if ([leftNode, rightNode].filter(isNull).length === 1) {
+      if (isNull(leftNode)) {
+        leftNode = DummyNodeJSON;
+      } else {
+        rightNode = DummyNodeJSON;
+      }
+    }
+
     const returnData = {
       name: node.key.toString(),
       attributes: {
         color: node._black ? NodeColor.BLACK : NodeColor.RED,
       },
-      children: [
-        this.getInOrderTraversalPath(node._left, findPath),
-        this.getInOrderTraversalPath(node._right, findPath),
-      ].filter((child) => !isNull(child)) as RawNodeDatum[] | undefined,
+      children: [leftNode, rightNode].filter((child) => !isNull(child)) as
+        | RawNodeDatum[]
+        | undefined,
     };
 
     if (isUndefined(findPath)) {

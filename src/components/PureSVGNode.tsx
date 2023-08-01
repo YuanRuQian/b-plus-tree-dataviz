@@ -38,6 +38,10 @@ const PureSvgNodeElement = ({
   nodeDatum,
   orientation,
 }: PureSvgNodeElementProps) => {
+  if (nodeDatum?.attributes?.isDummyNode) {
+    return <></>;
+  }
+
   return (
     <>
       <circle
