@@ -1,7 +1,9 @@
 
-# An interactive Red Black Tree visualizer
+# An Interactive Red Black Tree visualizer
 
-A simple react app that visualizes Red Black Tree, built with react-d3-tree.
+A simple Red Black Tree visualizer, built with [react-d3-tree](https://github.com/bkrem/react-d3-tree) & [Material-UI](https://material-ui.com/).
+
+![demo](images/demo.png)
 
 Try it online: [https://yuanruqian.github.io/red-black-tree-dataviz/](https://yuanruqian.github.io/red-black-tree-dataviz/)
 
