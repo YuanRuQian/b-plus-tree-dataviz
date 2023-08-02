@@ -107,6 +107,7 @@ const ControlPanel = () => {
         handleDelete={handleDelete}
         handleFind={handleFind}
         handleClearAll={handleClearAll}
+        transitionDuration={transitionDuration}
         handleTransitionDurationChange={handleTransitionDurationChange}
       />
       <Snackbar

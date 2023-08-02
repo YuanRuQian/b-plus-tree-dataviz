@@ -9,26 +9,31 @@ import {
 } from "@mui/material";
 import { isUndefined } from "../utils/utils";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import TransitionDurationSlider from "./TransitionDurationSlider";
 
 type AppBarProps = {
   handleInsert: (value: number) => void;
   handleDelete: (value: number) => void;
   handleFind: (value: number) => void;
   handleClearAll: () => void;
+  transitionDuration: number;
   handleTransitionDurationChange: (value: number) => void;
 };
 
 type CustomButtonProps = {
   onClick: () => void;
   buttonLabel: string;
+  tooltipTitle?: string;
 };
 
-const CustomButton = ({ onClick, buttonLabel }: CustomButtonProps) => (
-  <div>
-    <Button variant="outlined" onClick={onClick}>
-      {buttonLabel}
-    </Button>
-  </div>
+const CustomButton = ({ onClick, buttonLabel, tooltipTitle }: CustomButtonProps) => (
+  <Tooltip title={tooltipTitle} arrow>
+    <span>
+      <Button variant="outlined" color="success" onClick={onClick}>
+        {buttonLabel}
+      </Button>
+    </span>
+  </Tooltip>
 );
 
 type CustomNumberInputProps = {
@@ -43,6 +48,7 @@ const CustomNumberInput = ({
   inputLabel,
 }: CustomNumberInputProps) => (
   <TextField
+    color="success"
     type="number"
     label={inputLabel}
     value={isUndefined(value) ? "" : value}
@@ -61,7 +67,7 @@ const GitHubLinkButton = () => {
   return (
     <Tooltip title="Click to view the source code on GitHub" arrow>
       <Button onClick={handleOpenGithubRepo}>
-        <GitHubIcon fontSize="large" color="action" />
+        <GitHubIcon fontSize="large" color="success" />
       </Button>
     </Tooltip>
   );
@@ -73,6 +79,7 @@ const AppBar: React.FC<AppBarProps> = ({
   handleFind,
   handleClearAll,
   handleTransitionDurationChange,
+  transitionDuration,
 }) => {
   const [input, setInput] = React.useState<number | undefined>(undefined);
 
@@ -104,35 +111,30 @@ const AppBar: React.FC<AppBarProps> = ({
     }
   };
 
-  const handleSetTransitionDurationButtonClick = () => {
-    if (!isUndefined(input)) {
-      handleTransitionDurationChange(input);
-      setInput(undefined);
-      console.log(`Setting transition duration to ${input} ms`);
-    }
-  };
-
   const InsertButtonWithInput = () => (
-    <CustomButton onClick={handleInsertButtonClick} buttonLabel="Insert" />
+    <CustomButton onClick={handleInsertButtonClick} buttonLabel="Insert"
+    tooltipTitle="Insert a node with the given value into the tree if not already present."
+     />
   );
 
   const DeleteButtonWithInput = () => (
-    <CustomButton onClick={handleDeleteButtonClick} buttonLabel="Delete" />
+    <CustomButton onClick={handleDeleteButtonClick} buttonLabel="Delete"
+    tooltipTitle="Delete the node with the given value from the tree if present."
+    />
   );
 
   const FindButtonWithInput = () => (
-    <CustomButton onClick={handleFindButtonClick} buttonLabel="Find" />
+    <CustomButton
+      onClick={handleFindButtonClick}
+      buttonLabel="Find"
+      tooltipTitle="Highlight the path from root to target node in red if present."
+    />
   );
 
   const ClearAllButton = () => (
-    <CustomButton onClick={handleClearAll} buttonLabel="Clear All" />
-  );
-
-  const SetTransitionDurationButton = () => (
-    <CustomButton
-      onClick={handleSetTransitionDurationButtonClick}
-      buttonLabel="Set Animation Speed (ms)"
-    />
+    <CustomButton onClick={handleClearAll} buttonLabel="Clear All"
+    tooltipTitle="Clear all nodes from the tree."
+     />
   );
 
   return (
@@ -141,7 +143,7 @@ const AppBar: React.FC<AppBarProps> = ({
         <Toolbar
           disableGutters
           style={{
-            margin: "0.5rem 4rem",
+            margin: "0.5rem 3rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -156,7 +158,10 @@ const AppBar: React.FC<AppBarProps> = ({
           <DeleteButtonWithInput />
           <FindButtonWithInput />
           <ClearAllButton />
-          <SetTransitionDurationButton />
+          <TransitionDurationSlider
+            value={transitionDuration}
+            onChange={handleTransitionDurationChange}
+          />
           <GitHubLinkButton />
         </Toolbar>
       </MuiAppBar>

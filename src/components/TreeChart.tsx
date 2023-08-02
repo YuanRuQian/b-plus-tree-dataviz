@@ -6,6 +6,7 @@ import Tree, {
 } from "react-d3-tree";
 import PureSvgNodeElement from "./PureSVGNode";
 import { Typography } from "@mui/material";
+import { green } from "@mui/material/colors";
 
 type TreeChartProps = {
   redBlackTreeData: RawNodeDatum;
@@ -35,7 +36,7 @@ const TreeChart = ({
           justifyContent: "center",
         }}
       >
-        <Typography variant="h6" component="h6">
+        <Typography variant="h6" component="h6" color={green[700]}>
           🌲 An empty tree... Please insert some nodes! 🌲
         </Typography>
       </div>
@@ -60,7 +61,6 @@ const TreeChart = ({
     return "link__default";
   };
 
-  // TODO: proper transformation of tree data
   return (
     <div
       ref={treeContainerRef}
