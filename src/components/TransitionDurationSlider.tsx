@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { ThemeColor } from "../utils/constants";
 
 const SliderWithValueTooltip = styled(Slider)({
@@ -56,6 +56,7 @@ const TransitionDurationSlider = ({
     onChange(value as number);
   };
   return (
+    <Tooltip title="Adjust the transition duration when the tree data changes (1 ~ 2000 ms), unit in milliseconds" arrow>
     <Box sx={{ width: "15rem" }}>
       <Typography variant="subtitle2" color={ThemeColor} gutterBottom>
         Adjust Animation Speed: {value}ms
@@ -63,13 +64,14 @@ const TransitionDurationSlider = ({
       <SliderWithValueTooltip
         min={1}
         max={2000}
-        valueLabelDisplay="auto"
+        valueLabelDisplay="off"
         aria-label="transition duration (ms)"
         defaultValue={1000}
         value={value}
         onChange={onSliderValueChange}
       />
     </Box>
+    </Tooltip>
   );
 };
 
